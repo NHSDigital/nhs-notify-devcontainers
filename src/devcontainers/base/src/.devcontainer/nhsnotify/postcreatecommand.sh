@@ -8,7 +8,12 @@ cat ~/.zshrc
 source ~/.zshrc
 echo 'asdf setup complete'
 
+
+echo 'copying defaults'
 cd ~
+cp /nhsengland/repository-template/scripts ./scripts -r
+cp /nhsengland/repository-template/Makefile ./
+
 make config
 echo 'make config complete'
 

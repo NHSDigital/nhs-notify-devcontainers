@@ -19,3 +19,7 @@ cp /.zshrc ~/.zshrc
 source ~/.zshrc
 mkdir -p /zsh/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-autosuggestions /zsh/plugins/zsh-autosuggestions
+
+
+mdir -p /nhsengland/repository-template
+https://github.com/nhs-england-tools/repository-template.git /nhsengland/repository-template
