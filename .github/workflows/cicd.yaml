@@ -20,7 +20,7 @@ jobs:
       matrix:
         include:
           - context: ./src/devcontainers/base/src/.devcontainer 
-            dockerfile: Dockerfile
+            dockerfile: /src/devcontainers/base/src/.devcontainer/Dockerfile
             registry: ghcr.io
             image: nhsdigital/nhs-notify-devcontainer-base
 
