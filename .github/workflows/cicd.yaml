@@ -28,6 +28,9 @@ jobs:
             dockerfile: Dockerfile
             registry: ghcr.io
             image: nhsdigital/nhs-notify-devcontainer-base
+            title: NHS Notifiy Devcontainer Base Image
+            description: Base development container for NHS Notify projects
+            vendor: NHS England
 
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
@@ -57,6 +60,9 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
           labels: |
+            org.opencontainers.image.title= ${{ matrix.title }}
+            org.opencontainers.image.description=${{ matrix.description }}
+            org.opencontainers.image.vendor=${{ matrix.vendor }}
             org.opencontainers.image.url=${{ matrix.server }}/${{ matrix.org }}/${{ matrix.repository }}/blob/main/${{ matrix.path }}/${{ matrix.readme }}
             org.opencontainers.image.source=${{ matrix.server }}/${{ matrix.org }}/${{ matrix.repository }}/tree/main/${{ matrix.path }}
       # This step uses the `docker/build-push-action` action to build the image, based on your repository's `Dockerfile`. If the build succeeds, it pushes the image to GitHub Packages.
