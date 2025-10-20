@@ -1,0 +1,12 @@
+{
+    "dependsOn": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installOhMyZsh": true
+        }
+    },
+    "id": "nhsnotify",
+    "name": "NHS Notify",
+    "postCreateCommand": "zsh /postcreatecommand.sh",
+    "postStartCommand": "zsh /poststartcommand.sh",
+    "version": "1.0.1"
+}
