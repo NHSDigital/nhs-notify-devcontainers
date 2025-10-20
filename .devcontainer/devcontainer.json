@@ -1,0 +1,13 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:4.0.1-22-bullseye",
+   "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "azureDnsAutoDetection": true,
+            "dockerDashComposeVersion": "latest",
+            "installDockerBuildx": true,
+            "installDockerComposeSwitch": true,
+            "moby": true,
+            "version": "latest"
+        }
+    }
+}
