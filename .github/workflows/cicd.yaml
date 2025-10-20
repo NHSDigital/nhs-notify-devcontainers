@@ -24,6 +24,7 @@ jobs:
             repository: nhs-notify-devcontainers
             path: src/devcontainers/base
             readme: README.md
+            makefile_dir: ./src/devcontainers/base
             context: ./src/devcontainers/base/src/.devcontainer
             dockerfile: Dockerfile
             registry: ghcr.io
@@ -31,6 +32,8 @@ jobs:
             title: NHS Notifiy Devcontainer Base Image
             description: Base development container for NHS Notify projects
             vendor: NHS England
+            subFolder: ./src/devcontainers/base/src
+            runCmd: /welcome.sh
 
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
@@ -49,40 +52,58 @@ jobs:
           registry: ${{ matrix.registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      # This step uses [docker/metadata-action](https://github.com/docker/metadata-action#about) to extract tags and labels that will be applied to the specified image. The `id` "meta" allows the output of this step to be referenced in a subsequent step. The `images` value provides the base name for the tags and labels.
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+
+      - name: Pre-build dev container image
+        uses: devcontainers/ci@v0.3
         with:
-          images: ${{ matrix.registry }}/${{ matrix.image }}
-          flavor: |
-            latest=auto
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-          labels: |
-            org.opencontainers.image.title= ${{ matrix.title }}
-            org.opencontainers.image.description=${{ matrix.description }}
-            org.opencontainers.image.vendor=${{ matrix.vendor }}
-            org.opencontainers.image.url=${{ matrix.server }}/${{ matrix.org }}/${{ matrix.repository }}/blob/main/${{ matrix.path }}/${{ matrix.readme }}
-            org.opencontainers.image.source=${{ matrix.server }}/${{ matrix.org }}/${{ matrix.repository }}/tree/main/${{ matrix.path }}
-      # This step uses the `docker/build-push-action` action to build the image, based on your repository's `Dockerfile`. If the build succeeds, it pushes the image to GitHub Packages.
-      # It uses the `context` parameter to define the build's context as the set of files located in the specified path. For more information, see [Usage](https://github.com/docker/build-push-action#usage) in the README of the `docker/build-push-action` repository.
-      # It uses the `tags` and `labels` parameters to tag and label the image with the output from the "meta" step.
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-        with:
-          context: ${{ matrix.context }}
-          file: ${{ matrix.context }}/${{ matrix.dockerfile }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          imageName: ${{ matrix.registry }}/${{ matrix.image }}
+          push: always
+          subFolder: ${{ matrix.subFolder }}
+          runCmd: ${{ matrix.runCmd }}
+
+      # - uses: actions/setup-node@v6
+      #   with:
+      #     node-version: 24
+
+      # # This step uses [docker/metadata-action](https://github.com/docker/metadata-action#about) to extract tags and labels that will be applied to the specified image. The `id` "meta" allows the output of this step to be referenced in a subsequent step. The `images` value provides the base name for the tags and labels.
+      # - name: Extract metadata (tags, labels) for Docker
+      #   id: meta
+      #   uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+      #   with:
+      #     images: ${{ matrix.registry }}/${{ matrix.image }}
+      #     flavor: |
+      #       latest=auto
+      #     tags: |
+      #       type=raw,value=latest,enable={{is_default_branch}}
+      #     labels: |
+      #       org.opencontainers.image.title= ${{ matrix.title }}
+      #       org.opencontainers.image.description=${{ matrix.description }}
+      #       org.opencontainers.image.vendor=${{ matrix.vendor }}
+      #       org.opencontainers.image.url=${{ matrix.server }}/${{ matrix.org }}/${{ matrix.repository }}/blob/main/${{ matrix.path }}/${{ matrix.readme }}
+      #       org.opencontainers.image.source=${{ matrix.server }}/${{ matrix.org }}/${{ matrix.repository }}/tree/main/${{ matrix.path }}
+      # # This step uses the `docker/build-push-action` action to build the image, based on your repository's `Dockerfile`. If the build succeeds, it pushes the image to GitHub Packages.
+      # # It uses the `context` parameter to define the build's context as the set of files located in the specified path. For more information, see [Usage](https://github.com/docker/build-push-action#usage) in the README of the `docker/build-push-action` repository.
+      # # It uses the `tags` and `labels` parameters to tag and label the image with the output from the "meta" step.
+
+
+      # - run: make build
+      #   working-directory: ${{ matrix.makefile_dir }}
+
+      # - name: Build and push Docker image
+      #   id: push
+      #   uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+      #   with:
+      #     context: ${{ matrix.context }}
+      #     file: ${{ matrix.context }}/${{ matrix.dockerfile }}
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}
       
-      # This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see [Using artifact attestations to establish provenance for builds](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds).
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v3
-        with:
-          subject-name: ${{ matrix.registry }}/${{ matrix.image }}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+      # # This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see [Using artifact attestations to establish provenance for builds](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds).
+      # - name: Generate artifact attestation
+      #   uses: actions/attest-build-provenance@v3
+      #   with:
+      #     subject-name: ${{ matrix.registry }}/${{ matrix.image }}
+      #     subject-digest: ${{ steps.push.outputs.digest }}
+      #     push-to-registry: true
       
