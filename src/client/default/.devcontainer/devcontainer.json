@@ -1,3 +1,4 @@
  {
-  "image": "ghcr.io/nhsdigital/nhs-notify-devcontainers:latest"
+  "image": "ghcr.io/nhsdigital/nhs-notify-devcontainer-base:latest",
+  "name": "Notify Base Dev Container"
 }
