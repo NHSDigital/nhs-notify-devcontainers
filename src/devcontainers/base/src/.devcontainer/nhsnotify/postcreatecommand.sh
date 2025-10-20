@@ -8,10 +8,11 @@ cat ~/.zshrc
 source ~/.zshrc
 echo 'asdf setup complete'
 
+cd ~
 make config
 echo 'make config complete'
 
-jekyll --version && cd docs && bundle install
-echo 'jekyll setup complete'
+# jekyll --version && cd docs && bundle install
+# echo 'jekyll setup complete'
 
-./welcome.sh
+#/welcome.sh
