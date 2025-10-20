@@ -85,6 +85,9 @@
             "nodeGypDependencies": true,
             "nvmVersion": "latest",
             "version": "lts"
+        },
+        "ghcr.io/devcontainers/features/ruby:1": {
+            "version": "latest"
         }
     },
     "forwardPorts": [
