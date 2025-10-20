@@ -10,9 +10,10 @@ echo 'asdf setup complete'
 
 
 echo 'copying defaults'
-cd ~
+
 cp /nhsengland/repository-template/scripts ./scripts -r
 cp /nhsengland/repository-template/Makefile ./
+cp /nhsengland/repository-template/.tool-versions ./
 
 make config
 echo 'make config complete'

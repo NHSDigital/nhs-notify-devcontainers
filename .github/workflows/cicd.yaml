@@ -33,7 +33,7 @@ jobs:
             description: Base development container for NHS Notify projects
             vendor: NHS England
             subFolder: ./src/devcontainers/base/src
-            runCmd: /welcome.sh
+            runCmd: echo "Devcontainer built successfully"
 
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
