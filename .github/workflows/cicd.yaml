@@ -20,7 +20,7 @@ jobs:
       matrix:
         include:
           - context: ./src/devcontainers/base/src/.devcontainer
-            dockerfile: ./src/devcontainers/base/src/.devcontainer/Dockerfile
+            dockerfile: Dockerfile
             registry: ghcr.io
             image: nhsdigital/nhs-notify-devcontainer-base
 
@@ -55,7 +55,7 @@ jobs:
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: ${{ matrix.context }}
-          file: ${{ matrix.dockerfile }}
+          file: ${{ matrix.context }}/${{ matrix.dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -64,7 +64,6 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
         with:
-          context: ./src/devcontainers/base/src/.devcontainer
           subject-name: ${{ matrix.registry }}/${{ matrix.image }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
