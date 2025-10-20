@@ -22,4 +22,4 @@ git clone https://github.com/zsh-users/zsh-autosuggestions /zsh/plugins/zsh-auto
 
 
 mdir -p /nhsengland/repository-template
-https://github.com/nhs-england-tools/repository-template.git /nhsengland/repository-template
+git clone https://github.com/nhs-england-tools/repository-template.git /nhsengland/repository-template
