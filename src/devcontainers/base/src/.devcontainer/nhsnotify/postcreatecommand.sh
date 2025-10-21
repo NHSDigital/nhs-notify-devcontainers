@@ -39,7 +39,7 @@ source ~/.zshrc
 echo "reloaded shell"
 
 echo "running make config"
-make config
+zsh -c "make config"
 echo "make config complete"
 
 cd $CURRENT_DIR
