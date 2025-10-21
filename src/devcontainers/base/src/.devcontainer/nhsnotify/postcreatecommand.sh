@@ -48,8 +48,8 @@ echo 'export GPG_TTY=$(tty)' >> ~/.zshrc
 echo "added gpg tty to zshrc"
 
 echo "running make config"
-source ~/.zshrc
-echo "sourced .zshrc"
+#source ~/.zshrc
+#echo "sourced .zshrc"
 make config
 echo "make config complete"
 
