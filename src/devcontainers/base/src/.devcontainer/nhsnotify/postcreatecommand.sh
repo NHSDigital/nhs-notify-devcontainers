@@ -25,8 +25,8 @@ CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
 echo "current branch is $CURRENT_BRANCH"
 git switch -C $UPDATE_BRANCH
 
-\cp -r --update=none $DEST/docs ./docs
-\cp -rf $DEST/scripts ./scripts
+\cp -r --update=none $DEST/docs ./
+\cp -rf $DEST/scripts ./
 \cp -f $DEST/Makefile ./
 \cp -f $DEST/.tool-versions ./
 \cp --update=none $DEST/VERSION ./
