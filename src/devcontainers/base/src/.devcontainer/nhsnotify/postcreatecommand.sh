@@ -35,7 +35,7 @@ git switch -C $UPDATE_BRANCH
 \cp -f $DEST/.gitignore ./
 \cp -f $DEST/.gitleaksignore ./
 
-git add .
+#git add .
 #export GPG_TTY=$(tty)
 #git commit -m "Update default files from $REPO" || echo "No changes to commit"
 #git switch $CURRENT_BRANCH
