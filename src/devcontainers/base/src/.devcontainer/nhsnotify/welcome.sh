@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Configuration
+WEATHER_LOCATION="Leeds, UK"  # Change this to any location
+
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -35,6 +38,191 @@ animate_border() {
         sleep 0.1
     done
     echo
+}
+
+# Function to get weather and display ASCII art
+show_weather() {
+    local location="${WEATHER_LOCATION}"
+    echo -e "${CYAN}${BOLD}🌍 Weather in ${location}${NC}"
+    
+    # First, geocode the location to get lat/lon using Nominatim (free OpenStreetMap service)
+    local encoded_location=$(echo "$location" | sed 's/ /%20/g')
+    local geo_data=$(curl -s --max-time 3 "https://nominatim.openstreetmap.org/search?q=${encoded_location}&format=json&limit=1" 2>/dev/null)
+    
+    local latitude=""
+    local longitude=""
+    
+    if [ -n "$geo_data" ] && echo "$geo_data" | grep -q "lat"; then
+        latitude=$(echo "$geo_data" | grep -oE '"lat":"[0-9.-]+"' | head -1 | cut -d'"' -f4)
+        longitude=$(echo "$geo_data" | grep -oE '"lon":"[0-9.-]+"' | head -1 | cut -d'"' -f4)
+    fi
+    
+    # Fallback to Leeds coordinates if geocoding fails
+    if [ -z "$latitude" ] || [ -z "$longitude" ]; then
+        latitude="53.8008"
+        longitude="-1.5491"
+    fi
+    
+    # Use open-meteo.com (free, no API key required)
+    local weather_data=$(curl -s --max-time 3 "https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true" 2>/dev/null)
+    
+    if [ -n "$weather_data" ] && echo "$weather_data" | grep -q "current_weather"; then
+        # Parse temperature, weather code, wind speed and direction (handle decimal numbers)
+        local temp=$(echo "$weather_data" | grep -oE '"temperature":[0-9.-]+' | head -1 | cut -d':' -f2)
+        local weathercode=$(echo "$weather_data" | grep -oE '"weathercode":[0-9]+' | tail -1 | cut -d':' -f2)
+        local windspeed=$(echo "$weather_data" | grep -oE '"windspeed":[0-9.-]+' | tail -1 | cut -d':' -f2)
+        local winddirection=$(echo "$weather_data" | grep -oE '"winddirection":[0-9.-]+' | tail -1 | cut -d':' -f2)
+        
+        # Round temperature and wind speed
+        temp=$(printf "%.0f" "$temp" 2>/dev/null || echo "$temp")
+        windspeed=$(printf "%.0f" "$windspeed" 2>/dev/null || echo "$windspeed")
+        
+        # Convert wind direction to compass direction
+        local wind_dir=""
+        if [ -n "$winddirection" ]; then
+            local dir=$(printf "%.0f" "$winddirection" 2>/dev/null)
+            if [ $dir -ge 337 ] || [ $dir -lt 23 ]; then
+                wind_dir="N"
+            elif [ $dir -ge 23 ] && [ $dir -lt 68 ]; then
+                wind_dir="NE"
+            elif [ $dir -ge 68 ] && [ $dir -lt 113 ]; then
+                wind_dir="E"
+            elif [ $dir -ge 113 ] && [ $dir -lt 158 ]; then
+                wind_dir="SE"
+            elif [ $dir -ge 158 ] && [ $dir -lt 203 ]; then
+                wind_dir="S"
+            elif [ $dir -ge 203 ] && [ $dir -lt 248 ]; then
+                wind_dir="SW"
+            elif [ $dir -ge 248 ] && [ $dir -lt 293 ]; then
+                wind_dir="W"
+            elif [ $dir -ge 293 ] && [ $dir -lt 337 ]; then
+                wind_dir="NW"
+            fi
+        fi
+        
+        # WMO Weather interpretation codes
+        # 0: Clear sky, 1-3: Mainly clear/partly cloudy/overcast
+        # 45,48: Fog, 51-57: Drizzle, 61-67: Rain, 71-77: Snow
+        # 80-82: Rain showers, 85-86: Snow showers, 95-99: Thunderstorm
+        
+        case "$weathercode" in
+            0)
+                # Clear sky
+                echo -e "${YELLOW}"
+                echo "    \\   /    "
+                echo "     .-.     "
+                echo "  ― (   ) ―  "
+                echo "     \`-'     "
+                echo "    /   \\    "
+                condition="Clear"
+                ;;
+            1|2|3)
+                # Mainly clear to overcast
+                echo -e "${WHITE}"
+                echo "             "
+                echo "     .--.    "
+                echo "  .-(    ).  "
+                echo " (___.__)__) "
+                echo "             "
+                condition="Cloudy"
+                ;;
+            45|48)
+                # Fog
+                echo -e "${WHITE}"
+                echo "             "
+                echo " _ - _ - _ - "
+                echo "  _ - _ - _  "
+                echo " _ - _ - _ - "
+                echo "             "
+                condition="Foggy"
+                ;;
+            51|53|55|56|57|61|63|65|66|67|80|81|82)
+                # Rain/Drizzle
+                echo -e "${BLUE}"
+                echo "     .-.     "
+                echo "    (   ).   "
+                echo "   (___(__)  "
+                echo "    ʻ ʻ ʻ ʻ  "
+                echo "   ʻ ʻ ʻ ʻ   "
+                condition="Rainy"
+                ;;
+            71|73|75|77|85|86)
+                # Snow
+                echo -e "${WHITE}"
+                echo "     .-.     "
+                echo "    (   ).   "
+                echo "   (___(__)  "
+                echo "    *  *  *  "
+                echo "   *  *  *   "
+                condition="Snowy"
+                ;;
+            95|96|99)
+                # Thunderstorm
+                echo -e "${YELLOW}"
+                echo "     .-.     "
+                echo "    (   ).   "
+                echo "   (___(__)  "
+                echo "    ⚡ ʻ ⚡   "
+                echo "   ʻ ⚡ ʻ    "
+                condition="Stormy"
+                ;;
+            *)
+                # Default
+                echo -e "${CYAN}"
+                echo "     .-.     "
+                echo "    (   ).   "
+                echo "   (___(__)  "
+                echo "             "
+                condition="Unknown"
+                ;;
+        esac
+        echo -e "${NC}"
+        echo -e "${WHITE}${condition} ${temp}°C${NC}"
+        if [ -n "$windspeed" ] && [ -n "$wind_dir" ]; then
+            echo -e "${CYAN}💨 Wind: ${windspeed} km/h ${wind_dir}${NC}"
+        fi
+    else
+        # Fallback - show a nice cloudy Leeds default (it's usually cloudy there! 😄)
+        echo -e "${WHITE}"
+        echo "             "
+        echo "     .--.    "
+        echo "  .-(    ).  "
+        echo " (___.__)__) "
+        echo "             "
+        echo -e "${NC}"
+        echo -e "${CYAN}Typical Leeds weather ☁️  (API unavailable)${NC}"
+    fi
+    echo
+}
+
+# Function to show NHS Notify mascot - a messenger pigeon!
+show_mascot() {
+    local mascots=(
+        # Pigeon with letter
+        "${CYAN}
+       __     
+   ___( o)>   NHS Notify Messenger!
+   \\ <_. )   Delivering notifications
+    \`---'    at the speed of flight! 📬
+"
+        # Pigeon sitting
+        "${BLUE}
+      (o>     
+   __//\\\\__   Ready to send those
+   \`-|_|-'   important messages! 🕊️
+"
+        # Pigeon with NHS badge
+        "${PURPLE}
+    ___      
+   (o o)     NHS Notify Pigeon:
+   |)_(|     Your trusted notification
+    '-'      delivery service! 💙
+"
+    )
+    
+    # Pick a random mascot
+    local random_mascot=${mascots[$RANDOM % ${#mascots[@]}]}
+    echo -e "${random_mascot}${NC}"
 }
 
 # Helper function to count emojis in text
@@ -203,6 +391,9 @@ container_info=(
 draw_box "${PURPLE}${BOLD}" "${BOLD}${WHITE}CONTAINER INFORMATION${NC}" 80 "${container_info[@]}"
 echo
 
+# Show weather
+show_weather
+
 # Feature showcase
 echo -e "${GREEN}${BOLD}🚀 READY TO DEVELOP WITH:${NC}"
 echo
@@ -263,6 +454,9 @@ dev_tips=(
 random_tip=${dev_tips[$RANDOM % ${#dev_tips[@]}]}
 echo -e "${GREEN}${random_tip}${NC}"
 echo
+
+# Show NHS Notify mascot
+show_mascot
 
 # Quick Commands Reference
 echo -e "${PURPLE}${BOLD}⚡ QUICK COMMANDS${NC}"
