@@ -12,7 +12,8 @@ echo "Cloning $REPO into $DEST"
 
 REPO=https://github.com/NHSDigital/nhs-notify-repository-template.git
 DEST=$HOME/nhsengland/repository-template
-UPDATE_BRANCH=updating-the-default-files
+CURRENT_TIMESTAMP=$(date +%Y%m%d%H%M%S)
+UPDATE_BRANCH="updating-the-default-files-%$CURRENT_TIMESTAMP"
 
 mkdir -p $DEST
 echo "created destination directory $DEST"
@@ -36,10 +37,10 @@ git switch -C $UPDATE_BRANCH
 
 git add .
 export GPG_TTY=$(tty)
-git commit -m "Update default files from $REPO" || echo "No changes to commit"
+#git commit -m "Update default files from $REPO" || echo "No changes to commit"
+#git switch $CURRENT_BRANCH
+#git merge $UPDATE_BRANCH -m "Merge default files from $REPO"
 
-git switch $CURRENT_BRANCH
-git merge $UPDATE_BRANCH -m "Merge default files from $REPO"
 echo "$REPO template complete"
 
 echo "adding gpg tty to zshrc"
