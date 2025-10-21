@@ -1,11 +1,6 @@
 #!/bin/bash
 CURRENT_DIR=$(pwd)
 
-
-echo 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' >> ~/.zshrc
-sed -i "/plugins=/c\plugins=(git ssh-agent sudo terraform dirhistory)" ~/.zshrc
-cat ~/.zshrc
-
 echo "copying defaults"
 echo "getting nhse repo template"
 echo "Cloning $REPO into $DEST"
@@ -36,21 +31,14 @@ git switch -C $UPDATE_BRANCH
 \cp -f $DEST/.gitignore ./
 \cp -f $DEST/.gitleaksignore ./
 
-#git add .
-#export GPG_TTY=$(tty)
-#git commit -m "Update default files from $REPO" || echo "No changes to commit"
-#git switch $CURRENT_BRANCH
-#git merge $UPDATE_BRANCH -m "Merge default files from $REPO"
 
 echo "$REPO template complete"
 
-echo "adding gpg tty to zshrc"
-echo 'export GPG_TTY=$(tty)' >> ~/.zshrc
-echo "added gpg tty to zshrc"
+echo "reload shell"
+source ~/.zshrc
+echo "reloaded shell"
 
 echo "running make config"
-#source ~/.zshrc
-#echo "sourced .zshrc"
 make config
 echo "make config complete"
 
@@ -60,3 +48,14 @@ echo "sorting certs"
 sudo cp -r --update=none /home/ca-certificates/. /usr/local/share/ca-certificates
 sudo update-ca-certificates
 echo "sorted certs"
+
+
+echo "configuring ohmyzsh"
+echo 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' >> ~/.zshrc
+sed -i "/plugins=/c\plugins=(git ssh-agent sudo terraform dirhistory)" ~/.zshrc
+cat ~/.zshrc
+echo "configured ohmyzsh"
+
+echo "adding gpg tty to zshrc"
+echo 'export GPG_TTY=$(tty)' >> ~/.zshrc
+echo "added gpg tty to zshrc"
