@@ -13,7 +13,7 @@ echo "Cloning $REPO into $DEST"
 REPO=https://github.com/NHSDigital/nhs-notify-repository-template.git
 DEST=$HOME/nhsengland/repository-template
 CURRENT_TIMESTAMP=$(date +%Y%m%d%H%M%S)
-UPDATE_BRANCH="updating-the-default-files-%$CURRENT_TIMESTAMP"
+UPDATE_BRANCH="updating-the-default-files-$CURRENT_TIMESTAMP"
 
 mkdir -p $DEST
 echo "created destination directory $DEST"
