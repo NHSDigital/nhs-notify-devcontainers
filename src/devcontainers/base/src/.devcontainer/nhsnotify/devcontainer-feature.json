@@ -2,6 +2,9 @@
     "dependsOn": {
         "ghcr.io/devcontainers/features/common-utils:2": {
             "installOhMyZsh": true
+        },
+         "ghcr.io/devcontainers/features/go:1": {
+            "version": "latest"
         }
     },
     "id": "nhsnotify",
