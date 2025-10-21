@@ -394,6 +394,17 @@ echo
 # Show weather
 show_weather
 
+# Show wttr.in output
+echo -e "${CYAN}${BOLD}🌤️  wttr.in Weather Report${NC}"
+encoded_location=$(echo "$WEATHER_LOCATION" | sed 's/ /+/g')
+wttr_output=$(curl -s --max-time 5 "wttr.in/${encoded_location}?1" 2>/dev/null)
+if [ -n "$wttr_output" ]; then
+    echo "$wttr_output"
+else
+    echo -e "${YELLOW}⚠️  wttr.in service unavailable${NC}"
+fi
+echo
+
 # Feature showcase
 echo -e "${GREEN}${BOLD}🚀 READY TO DEVELOP WITH:${NC}"
 echo
