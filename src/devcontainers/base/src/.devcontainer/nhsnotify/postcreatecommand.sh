@@ -24,6 +24,7 @@ CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
 echo "current branch is $CURRENT_BRANCH"
 git switch -C $UPDATE_BRANCH
 
+
 \cp -rf $DEST/scripts ./scripts
 \cp -f $DEST/Makefile ./
 \cp -f $DEST/.tool-versions ./
@@ -34,6 +35,7 @@ git switch -C $UPDATE_BRANCH
 \cp -f $DEST/.gitleaksignore ./
 
 git add .
+export GPG_TTY=$(tty)
 git commit -m "Update default files from $REPO" || echo "No changes to commit"
 
 git switch $CURRENT_BRANCH
