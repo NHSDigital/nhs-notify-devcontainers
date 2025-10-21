@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "running make config"
-make config
+zsh -c "make config"
 echo "make config complete"
 
 /welcome.sh
