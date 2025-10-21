@@ -39,9 +39,9 @@ source ~/.zshrc
 echo "reloaded shell"
 
 export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
-echo "running make config"
-make config
-echo "make config complete"
+# echo "running make config"
+# make config
+# echo "make config complete"
 
 cd $CURRENT_DIR
 
