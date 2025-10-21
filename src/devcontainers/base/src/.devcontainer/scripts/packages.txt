@@ -1,5 +1,6 @@
 build-essential
 ca-certificates
+curl
 fonts-liberation
 gdb
 inetutils-inetd
@@ -25,10 +26,12 @@ libgtk-3-0
 liblzma-dev
 libmpdec-dev
 libncurses5-dev
+libncursesw5-dev
 libnspr4
 libnss3
 libpango-1.0-0
 libpangocairo-1.0-0
+libreadline-dev
 libreadline6-dev
 libsqlite3-dev
 libssl-dev
@@ -47,6 +50,7 @@ libxrender1
 libxss1
 libxtst6
 libzstd-dev
+llvm
 lsb-release
 lzma
 lzma-dev
@@ -57,4 +61,5 @@ uuid-dev
 wget
 xdg-utils
 xorg
+xz-utils
 zlib1g-dev

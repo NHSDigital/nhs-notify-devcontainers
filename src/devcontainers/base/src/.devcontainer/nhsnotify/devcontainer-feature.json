@@ -1,5 +1,10 @@
 {
     "dependsOn": {
+         "ghcr.io/devcontainers/features/python:1.7.1": {
+            "version": "3.13.8",
+            "installTools": true
+         },
+
         "ghcr.io/devcontainers/features/aws-cli:1.1.2": {
             "version": "2.31.18"
         },
