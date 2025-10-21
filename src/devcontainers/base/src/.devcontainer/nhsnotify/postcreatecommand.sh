@@ -31,6 +31,9 @@ echo "created destination directory $DEST"
 echo "Cloning repository from $REPO to $DEST"
 git clone $REPO $DEST
 echo "cloned repository $REPO to $DEST"
+
+CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
+echo "current branch is $CURRENT_BRANCH"
 git switch -C $UPDATE_BRANCH
 
 \cp -rf $DEST/scripts ./scripts
@@ -40,7 +43,7 @@ git switch -C $UPDATE_BRANCH
 git add .
 git commit -m "Update default files from $REPO" || echo "No changes to commit"
 
-git switch -
+git switch $CURRENT_BRANCH
 git merge $UPDATE_BRANCH -m "Merge default files from $REPO"
 echo "$REPO template complete"
 
