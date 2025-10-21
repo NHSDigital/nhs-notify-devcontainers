@@ -37,13 +37,117 @@ animate_border() {
     echo
 }
 
+# Helper function to count emojis in text
+count_emojis() {
+    local text="$1"
+    local count=0
+    
+    # List of emojis used in this script (each should be counted)
+    # Note: Some emojis like 🖥️ and ⏱️ include variation selectors which are handled separately
+    local emojis="🐳 📅 ⏰ 👤 🖥 📂 🧠 💾 ⚡ ⏱ 🚀 🌟 💡 🔍 📦 🔧 📝 🔐 🔥 🎯 💎 🏆 🎨 ⭐ 🌿 ⚠ 🎉 💪 🐍 🐙 ☁ 🛠 📊 🔄 📚 🟢 💭 🌅 ☀ 🌙 ☕"
+    
+    # Count each emoji type (without variation selectors in the search pattern)
+    for emoji in $emojis; do
+        local found=$(echo "$text" | grep -o "$emoji" 2>/dev/null | wc -l)
+        count=$((count + found))
+    done
+    
+    echo "$count"
+}
+
+# Helper function to count variation selectors (zero-width characters that add to string length but not display)
+count_variation_selectors() {
+    local text="$1"
+    # Variation Selector-16 (U+FE0F) appears after some emojis like 🖥️ and ⏱️
+    # These are counted by bash as characters but display as zero width
+    # We need to subtract them from the length since they don't display
+    local vs_count=$(echo "$text" | grep -o $'\uFE0F' 2>/dev/null | wc -l)
+    echo "$vs_count"
+}
+
+# Standard boxing function - creates a box around content
+# Usage: draw_box <border_color> <title> <box_width> [line1] [line2] ...
+draw_box() {
+    local border_color="$1"
+    local title="$2"
+    local box_width="$3"
+    shift 3
+    local lines=("$@")
+    
+    # Calculate internal width (box_width minus borders and padding: "║ " + " ║")
+    local internal_width=$((box_width - 4))
+    
+    # Top border
+    echo -e "${border_color}╔$(printf '═%.0s' $(seq 1 $((box_width - 2))))╗${NC}"
+    
+    # Title (if provided)
+    if [ -n "$title" ]; then
+        # Strip colors and measure
+        local title_clean=$(echo -e "$title" | sed 's/\x1b\[[0-9;]*m//g')
+        # Count actual character positions (bash's ${#var} counts multi-byte chars correctly)
+        local title_len=${#title_clean}
+        # Count emojis (each takes 2 display columns but bash counts as 1)
+        local title_emoji_count=$(count_emojis "$title_clean")
+        # Count variation selectors (counted as 1 char by bash but 0 width display)
+        local title_vs_count=$(count_variation_selectors "$title_clean")
+        # Display width: emojis with VS are already counted as 2 by bash and display as 2
+        # So: display = bash_length + (emojis without VS) - (VS count * 2, since they add to bash count but not display and block the emoji +1)
+        local display_adjustment=$((title_emoji_count - title_vs_count - title_vs_count))
+        local title_display=$((title_len + display_adjustment))
+        
+        local title_padding=$(( (internal_width - title_display) / 2 ))
+        local title_padding_right=$(( internal_width - title_display - title_padding ))
+        printf "${border_color}║${NC} "
+        printf "%*s" $title_padding ""
+        echo -ne "$title"
+        printf "%*s" $title_padding_right ""
+        echo -e " ${border_color}║${NC}"
+        echo -e "${border_color}╠$(printf '═%.0s' $(seq 1 $((box_width - 2))))╣${NC}"
+    fi
+    
+    # Content lines
+    for line in "${lines[@]}"; do
+        # Strip ANSI codes
+        local line_clean=$(echo -e "$line" | sed 's/\x1b\[[0-9;]*m//g')
+        # Count characters as bash sees them
+        local line_len=${#line_clean}
+        # Count emojis (each needs +1 for double-width display)
+        local line_emoji_count=$(count_emojis "$line_clean")
+        # Count variation selectors (need to subtract since they don't display)
+        local line_vs_count=$(count_variation_selectors "$line_clean")
+        
+        # Special handling: emojis WITH variation selectors don't need the +1
+        # because bash already counts them as 2 (emoji + VS), and they display as 2
+        # So for lines with VS, don't add the emoji count
+        # Display width = bash_length + emoji_count - (vs_count + vs_count)
+        # Actually: if VS exists, that emoji shouldn't be counted in emoji_count adjustment
+        local display_adjustment=$((line_emoji_count - line_vs_count - line_vs_count))
+        local actual_display_width=$((line_len + display_adjustment))
+        
+        local padding_needed=$((internal_width - actual_display_width))
+        
+        # Ensure padding is not negative
+        if [ $padding_needed -lt 0 ]; then
+            padding_needed=0
+        fi
+        
+        printf "${border_color}║${NC} "
+        echo -ne "$line"
+        printf "%*s" $padding_needed ""
+        echo -e " ${border_color}║${NC}"
+    done
+    
+    # Bottom border
+    echo -e "${border_color}╚$(printf '═%.0s' $(seq 1 $((box_width - 2))))╝${NC}"
+}
+
 # Clear screen and start the show
-clear
+#clear
 
 # Animated border
 animate_border
 
-echo -e "${BOLD}${BLUE}"
+echo -e "${BOLD}${GREEN}"
 echo "
 ██████╗ ███████╗██╗   ██╗    ███████╗███╗   ██╗██╗   ██╗██╗██████╗  ██████╗ ███╗   ██╗███╗   ███╗███████╗███╗   ██╗████████╗
 ██╔══██╗██╔════╝██║   ██║    ██╔════╝████╗  ██║██║   ██║██║██╔══██╗██╔═══██╗████╗  ██║████╗ ████║██╔════╝████╗  ██║╚══██╔══╝
@@ -87,33 +191,118 @@ echo -e "${CYAN}]${NC}"
 echo
 
 # System info with style
-echo -e "${PURPLE}${BOLD}╔══════════════════════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${PURPLE}${BOLD}║${NC}                            ${BOLD}${WHITE}CONTAINER INFORMATION${NC}                            ${PURPLE}${BOLD}║${NC}"
-echo -e "${PURPLE}${BOLD}╠══════════════════════════════════════════════════════════════════════════════╣${NC}"
-echo -e "${PURPLE}${BOLD}║${NC} ${CYAN}🐳 Container:${NC} NHS Notify Development Environment                      ${PURPLE}${BOLD}║${NC}"
-echo -e "${PURPLE}${BOLD}║${NC} ${CYAN}📅 Date:${NC}      $(date +'%A, %B %d, %Y')                                ${PURPLE}${BOLD}║${NC}"
-echo -e "${PURPLE}${BOLD}║${NC} ${CYAN}⏰ Time:${NC}      $(date +'%H:%M:%S %Z')                                     ${PURPLE}${BOLD}║${NC}"
-echo -e "${PURPLE}${BOLD}║${NC} ${CYAN}👤 User:${NC}      $(whoami)                                                    ${PURPLE}${BOLD}║${NC}"
-echo -e "${PURPLE}${BOLD}║${NC} ${CYAN}🖥️  Host:${NC}      $(hostname)                                              ${PURPLE}${BOLD}║${NC}"
-echo -e "${PURPLE}${BOLD}║${NC} ${CYAN}📂 Workspace:${NC} $(pwd)                           ${PURPLE}${BOLD}║${NC}"
-echo -e "${PURPLE}${BOLD}╚══════════════════════════════════════════════════════════════════════════════╝${NC}"
+container_info=(
+    "${CYAN}🐳 Container: NHS Notify Development Environment${NC}"
+    "${CYAN}📅 Date:      $(date +'%A, %B %d, %Y')${NC}"
+    "${CYAN}⏰ Time:      $(date +'%H:%M:%S %Z')${NC}"
+    "${CYAN}👤 User:      $(whoami)${NC}"
+    "${CYAN}🖥️  Host:      $(hostname)${NC}"
+    "${CYAN}📂 Workspace: $(pwd)${NC}"
+)
+
+draw_box "${PURPLE}${BOLD}" "${BOLD}${WHITE}CONTAINER INFORMATION${NC}" 80 "${container_info[@]}"
 echo
 
 # Feature showcase
 echo -e "${GREEN}${BOLD}🚀 READY TO DEVELOP WITH:${NC}"
 echo
-echo -e "${YELLOW}  ✨ Node.js & npm${NC}       - JavaScript/TypeScript development"
-echo -e "${YELLOW}  🐍 Python & pip${NC}       - Python development tools"
-echo -e "${YELLOW}  🐙 Git${NC}                - Version control"
-echo -e "${YELLOW}  🐳 Docker${NC}             - Container management"
-echo -e "${YELLOW}  📝 VS Code Extensions${NC} - Enhanced development experience"
-echo -e "${YELLOW}  🔧 ESLint & Prettier${NC}  - Code formatting and linting"
+echo -e "${YELLOW}  🟢 Node.js 22.21.0${NC}      - JavaScript/TypeScript development with NVM"
+echo -e "${YELLOW}  🐍 Python${NC}               - Python development tools"
+echo -e "${YELLOW}  � Go 1.25.3${NC}            - Go development environment"
+echo -e "${YELLOW}  💎 Ruby 3.4.7${NC}           - Ruby development tools"
+echo -e "${YELLOW}  🐙 Git + GitHub CLI${NC}     - Version control with gh CLI tools"
+echo -e "${YELLOW}  🐳 Docker-in-Docker${NC}     - Container management & Docker Compose"
+echo -e "${YELLOW}  ☁️  AWS CLI 2.31.18${NC}      - Amazon Web Services toolkit"
+echo -e "${YELLOW}  📦 ASDF Version Manager${NC}  - Multi-language version management"
+echo -e "${YELLOW}  � Build Essential${NC}      - C/C++ compilation tools"
+echo -e "${YELLOW}  🛠️  Oh My Zsh${NC}            - Enhanced shell with plugins (git, ssh-agent, terraform)"
+echo -e "${YELLOW}  📝 VS Code Extensions${NC}    - 30+ productivity extensions pre-installed"
+echo -e "${YELLOW}  � ESLint & Prettier${NC}     - Code formatting and linting"
+echo -e "${YELLOW}  📊 Terraform Support${NC}     - Infrastructure as Code tools"
+echo -e "${YELLOW}  🔐 GPG & SSH${NC}             - Security and authentication tools"
+echo -e "${YELLOW}  📋 Make & Scripts${NC}        - NHS Notify repository templates & automation"
+echo
+
+# Quick Health Check & Stats
+memory_info=$(free -h | awk 'NR==2{printf "Memory: %s/%s (%.1f%%)", $3,$2,$3*100/$2 }')
+disk_info=$(df -h / | awk 'NR==2{printf "Disk: %s/%s (%s used)", $3,$2,$5}')
+cpu_info="CPU Cores: $(nproc)"
+uptime_raw=$(uptime -p | sed 's/up //')
+uptime_info="Container uptime: ${uptime_raw}"
+
+health_check=(
+    "${GREEN}🧠 ${memory_info}${NC}"
+    "${GREEN}💾 ${disk_info}${NC}"
+    "${GREEN}⚡ ${cpu_info}${NC}"
+    "${GREEN}⏱️  ${uptime_info}${NC}"
+)
+
+draw_box "${CYAN}" "${CYAN}${BOLD}📊 QUICK HEALTH CHECK${NC}" 80 "${health_check[@]}"
 echo
 
 # Fun message with typewriter effect
 echo -e "${BOLD}${CYAN}"
 typewriter "💡 Tip: This environment is optimized for NHS Notify development!"
 echo -e "${NC}"
+echo
+
+# Development Tips
+dev_tips=(
+    "💡 Tip: Use 'make help' to see available project commands!"
+    "🔍 Tip: Run 'gh repo view' to quickly check the current repository status!"
+    "🐳 Tip: Use 'docker ps' to see running containers in this environment!"
+    "📦 Tip: Run 'asdf list' to see all installed language versions!"
+    "🔧 Tip: Type 'code .' to open the current directory in VS Code!"
+    "🚀 Tip: Use 'npm run dev' or 'make dev' to start development servers!"
+    "🌟 Tip: Press Ctrl+\` to open/close the integrated terminal!"
+    "📝 Tip: Use 'git log --oneline -10' for a clean commit history view!"
+    "🔐 Tip: Run 'gh auth status' to check your GitHub authentication!"
+    "⚡ Tip: Use 'terraform --version' to verify Terraform installation!"
+)
+
+random_tip=${dev_tips[$RANDOM % ${#dev_tips[@]}]}
+echo -e "${GREEN}${random_tip}${NC}"
+echo
+
+# Quick Commands Reference
+echo -e "${PURPLE}${BOLD}⚡ QUICK COMMANDS${NC}"
+echo -e "${YELLOW}  make help${NC}          - Show project-specific commands"
+echo -e "${YELLOW}  gh repo view${NC}       - View current repository info"
+echo -e "${YELLOW}  docker ps${NC}          - List running containers"
+echo -e "${YELLOW}  asdf current${NC}       - Show current language versions"
+echo -e "${YELLOW}  aws --version${NC}      - Verify AWS CLI installation"
+echo
+
+# Time-based greeting with fun elements
+current_hour=$(date +%H)
+if [ $current_hour -lt 12 ]; then
+    greeting="🌅 Good morning"
+    mood_emoji="☕"
+elif [ $current_hour -lt 17 ]; then
+    greeting="☀️ Good afternoon" 
+    mood_emoji="🚀"
+else
+    greeting="🌙 Good evening"
+    mood_emoji="🌟"
+fi
+
+echo -e "${BOLD}${WHITE}${greeting}, $(whoami)! ${mood_emoji} Ready to build something amazing?${NC}"
+echo
+
+# Fun coding mood indicator
+coding_moods=(
+    "🔥 You're on fire today!"
+    "⚡ High voltage coding mode activated!"
+    "🎯 Laser-focused and ready to ship!"
+    "🧠 Big brain energy detected!"
+    "💎 Time to create something brilliant!"
+    "🚀 Launch sequence initiated!"
+    "🎨 Ready to paint some beautiful code!"
+    "🏆 Champion developer mode: ENABLED!"
+)
+
+random_mood=${coding_moods[$RANDOM % ${#coding_moods[@]}]}
+echo -e "${BOLD}${PURPLE}${random_mood}${NC}"
 echo
 
 # Motivational quote
@@ -123,14 +312,108 @@ quotes=(
     "\"Code is like humor. When you have to explain it, it's bad.\" - Cory House"
     "\"First, solve the problem. Then, write the code.\" - John Johnson"
     "\"Experience is the name everyone gives to their mistakes.\" - Oscar Wilde"
+    "\"Any fool can write code that a computer can understand. Good programmers write code that humans can understand.\" - Martin Fowler"
+    "\"The only way to go fast is to go well.\" - Robert C. Martin"
+    "\"Talk is cheap. Show me the code.\" - Linus Torvalds"
+    "\"Programs must be written for people to read, and only incidentally for machines to execute.\" - Harold Abelson"
+    "\"The best error message is the one that never shows up.\" - Thomas Fuchs"
+    "\"Simplicity is the ultimate sophistication.\" - Leonardo da Vinci"
+    "\"Code never lies, comments sometimes do.\" - Ron Jeffries"
+    "\"The most important property of a program is whether it accomplishes the intention of its user.\" - C.A.R. Hoare"
+    "\"Debugging is twice as hard as writing the code in the first place.\" - Brian Kernighan"
+    "\"Good code is its own best documentation.\" - Steve McConnell"
+    "\"Make it work, make it right, make it fast.\" - Kent Beck"
+    "\"The function of good software is to make the complex appear to be simple.\" - Grady Booch"
+    "\"There are only two hard things in Computer Science: cache invalidation and naming things.\" - Phil Karlton"
+    "\"Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.\" - Antoine de Saint-Exupéry"
+    "\"Programming is not about typing, it's about thinking.\" - Rich Hickey"
 )
 
 random_quote=${quotes[$RANDOM % ${#quotes[@]}]}
 echo -e "${ITALIC}${BLUE}💭 ${random_quote}${NC}"
 echo
 
+# Fun Achievement System
+echo -e "${YELLOW}${BOLD}🏆 DEVELOPER ACHIEVEMENTS UNLOCKED${NC}"
+
+# Check for various files/conditions and award achievements
+achievements=()
+
+if [ -f "package.json" ]; then
+    achievements+=("📦 Node.js Navigator - package.json detected!")
+fi
+
+if [ -f "Dockerfile" ]; then
+    achievements+=("🐳 Container Captain - Dockerfile found!")
+fi
+
+if [ -f "terraform.tf" ] || [ -f "main.tf" ]; then
+    achievements+=("🏗️ Infrastructure Architect - Terraform files detected!")
+fi
+
+if [ -f "Makefile" ]; then
+    achievements+=("⚙️ Automation Expert - Makefile ready to roll!")
+fi
+
+if [ -d ".git" ]; then
+    achievements+=("🔄 Version Control Virtuoso - Git repository active!")
+fi
+
+if [ -f "README.md" ]; then
+    achievements+=("📚 Documentation Dynamo - README.md present!")
+fi
+
+# Always available achievements
+achievements+=("🎯 Environment Expert - NHS Notify devcontainer loaded!")
+achievements+=("⚡ Multi-language Master - Node.js, Python, Go & Ruby ready!")
+
+# Display random achievements (max 3)
+if [ ${#achievements[@]} -gt 0 ]; then
+    # Shuffle and take up to 3 achievements
+    for i in $(shuf -i 0-$((${#achievements[@]}-1)) | head -3); do
+        echo -e "${CYAN}  ${achievements[$i]}${NC}"
+    done
+else
+    echo -e "${CYAN}  🚀 Ready to unlock your first achievement!${NC}"
+fi
+echo
+
+
+
+# Fun container stats
+total_packages=$(dpkg -l | wc -l)
+vs_code_extensions="30+"
+
+echo -e "${BOLD}${CYAN}📊 Container loaded with ${total_packages} packages & ${vs_code_extensions} VS Code extensions!${NC}"
+echo -e "${BOLD}${GREEN}🎉 Welcome to your NHS Notify development journey! Happy coding! 🎉${NC}"
+
+# Random encouraging message
+encouraging_messages=(
+    "🌟 Every expert was once a beginner. Every pro was once an amateur!"
+    "💪 Great things never come from comfort zones!"
+    "🎯 Code with purpose, debug with patience, deploy with confidence!"
+    "🚀 Today's bugs are tomorrow's features (just kidding, fix them)!"
+    "🔥 Write code that future you will thank present you for!"
+    "⭐ The best code is code that solves real problems!"
+)
+
+random_message=${encouraging_messages[$RANDOM % ${#encouraging_messages[@]}]}
+echo -e "${ITALIC}${YELLOW}${random_message}${NC}"
+echo
+
+# Show current git branch if in a repo
+if git rev-parse --git-dir > /dev/null 2>&1; then
+    current_branch=$(git branch --show-current 2>/dev/null || echo "detached")
+    echo -e "${CYAN}🌿 Current branch: ${BOLD}${current_branch}${NC}"
+    
+    # Check if there are uncommitted changes
+    if ! git diff-index --quiet HEAD -- 2>/dev/null; then
+        echo -e "${YELLOW}⚠️  You have uncommitted changes - don't forget to commit them!${NC}"
+    fi
+fi
+
+
+echo
+
 # Final animated border
 animate_border
-
-echo -e "${BOLD}${GREEN}🎉 Welcome to your NHS Notify development journey! Happy coding! 🎉${NC}"
-echo
