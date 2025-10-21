@@ -22,6 +22,7 @@ echo "current branch is $CURRENT_BRANCH"
 git switch -C $UPDATE_BRANCH
 
 \cp -r --update=none $DEST/docs ./
+\cp -r --update=none $DEST/infrastructure ./
 \cp -rf $DEST/scripts ./
 \cp -f $DEST/Makefile ./
 \cp -f $DEST/.tool-versions ./
