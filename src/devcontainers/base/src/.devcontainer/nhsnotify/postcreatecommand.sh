@@ -44,6 +44,10 @@ git switch -
 git merge $UPDATE_BRANCH -m "Merge default files from $REPO"
 echo "$REPO template complete"
 
+echo "adding gpg tty to zshrc"
+echo 'export GPG_TTY=$(tty)' >> ~/.zshrc
+echo "added gpg tty to zshrc"
+
 echo "running make config"
 source ~/.zshrc
 echo "sourced .zshrc"
