@@ -1,21 +1,9 @@
 #!/bin/bash
 CURRENT_DIR=$(pwd)
 
-echo 'install asdf via go'
-go install github.com/asdf-vm/asdf/cmd/asdf@v0.18.0
+
 echo 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' >> ~/.zshrc
-#git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-#echo 'source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh' >> ~/.zshrc
-#sed -i "/plugins=/c\plugins=(git ssh-agent sudo terraform dirhistory zsh-autosuggestions)" ~/.zshrc
 sed -i "/plugins=/c\plugins=(git ssh-agent sudo terraform dirhistory)" ~/.zshrc
-cat ~/.zshrc
-
-
-echo "installing asdf plugins"
-curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-echo 'eval "$(zoxide init zsh)"' >> ~/.zshrc
-echo "zoxide plugin added"
-
 cat ~/.zshrc
 
 echo "copying defaults"
