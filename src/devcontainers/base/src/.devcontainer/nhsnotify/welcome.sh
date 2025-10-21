@@ -29,7 +29,7 @@ animate_border() {
     local width=80
     local chars="▓▒░ ░▒▓"
     
-    for frame in {1..3}; do
+    for frame in {1..10}; do
         printf "\r${CYAN}"
         for (( i=0; i<width; i++ )); do
             printf "%s" "${chars:$((($i + $frame) % 7)):1}"
@@ -37,6 +37,23 @@ animate_border() {
         printf "${NC}"
         sleep 0.1
     done
+    echo
+}
+
+# Function to display animated loading bar
+# Usage: loading_bar "Loading message..."
+loading_bar() {
+    local message="$1"
+    local bar_length=${2:-50}  # Default to 50 chars if not specified
+    local delay=${3:-0.02}     # Default to 0.02s delay if not specified
+    
+    echo -e "${YELLOW}${BOLD}${message}${NC}"
+    printf "${CYAN}["
+    for i in $(seq 1 $bar_length); do
+        printf "${GREEN}█${NC}"
+        sleep $delay
+    done
+    echo -e "${CYAN}]${NC}"
     echo
 }
 
@@ -368,15 +385,10 @@ echo "
 "
 echo -e "${NC}"
 
+animate_border
+
 # Animated loading bar
-echo -e "${YELLOW}${BOLD}Initializing NHS Notify Development Environment...${NC}"
-echo -e "${CYAN}["
-for i in {1..50}; do
-    printf "${GREEN}█${NC}"
-    sleep 0.02
-done
-echo -e "${CYAN}]${NC}"
-echo
+loading_bar "Initializing NHS Notify Development Environment..."
 
 # System info with style
 container_info=(
@@ -391,6 +403,7 @@ container_info=(
 draw_box "${PURPLE}${BOLD}" "${BOLD}${WHITE}CONTAINER INFORMATION${NC}" 80 "${container_info[@]}"
 echo
 
+loading_bar "Getting weather..."
 # Show weather
 show_weather
 
@@ -538,6 +551,8 @@ random_quote=${quotes[$RANDOM % ${#quotes[@]}]}
 echo -e "${ITALIC}${BLUE}💭 ${random_quote}${NC}"
 echo
 
+loading_bar "Getting achievements..."
+
 # Fun Achievement System
 echo -e "${YELLOW}${BOLD}🏆 DEVELOPER ACHIEVEMENTS UNLOCKED${NC}"
 
@@ -571,6 +586,8 @@ fi
 # Always available achievements
 achievements+=("🎯 Environment Expert - NHS Notify devcontainer loaded!")
 achievements+=("⚡ Multi-language Master - Node.js, Python, Go & Ruby ready!")
+
+
 
 # Display random achievements (max 3)
 if [ ${#achievements[@]} -gt 0 ]; then
