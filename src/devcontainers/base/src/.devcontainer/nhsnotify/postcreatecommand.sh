@@ -24,13 +24,14 @@ echo "Cloning $REPO into $DEST"
 
 REPO=https://github.com/NHSDigital/nhs-notify-repository-template.git
 DEST=$HOME/nhsengland/repository-template
+UPDATE_BRANCH=updating-the-default-files
 
 mkdir -p $DEST
 echo "created destination directory $DEST"
 echo "Cloning repository from $REPO to $DEST"
 git clone $REPO $DEST
 echo "cloned repository $REPO to $DEST"
-git switch -C updating-the-default-files
+git switch -C $UPDATE_BRANCH
 
 \cp -rf $DEST/scripts ./scripts
 \cp -f $DEST/Makefile ./
@@ -40,7 +41,7 @@ git add .
 git commit -m "Update default files from $REPO" || echo "No changes to commit"
 
 git switch -
-git merge updating-the-default-files -m "Merge default files from $REPO"
+git merge $UPDATE_BRANCH -m "Merge default files from $REPO"
 echo "$REPO template complete"
 
 echo "running make config"
