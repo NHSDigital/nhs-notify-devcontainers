@@ -104,7 +104,7 @@
     "runArgs": [
         "--platform=linux/amd64"
     ],
-    "initializeCommand": "/setup/scripts/init.sh",
+    "initializeCommand": "mkdir -p $HOME/.aws || true && mkdir -p $HOME/.gnupg || true && mkdir -p $HOME/.ssh || true",
     "mounts": [
         "source=/usr/local/share/ca-certificates,target=/home/ca-certificates,type=bind,consistency=cached",
         "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
