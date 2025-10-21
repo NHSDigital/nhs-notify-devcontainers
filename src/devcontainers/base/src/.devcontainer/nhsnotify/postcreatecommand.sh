@@ -19,6 +19,8 @@ echo "cloned repository $REPO branch $CHECKOUT_BRANCH to $DEST"
 
 CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
 echo "current branch is $CURRENT_BRANCH"
+git stash
+echo "stashed any changes on branch $CURRENT_BRANCH"
 git switch -C $UPDATE_BRANCH
 
 \cp -r --update=none $DEST/docs ./
