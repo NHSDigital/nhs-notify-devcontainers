@@ -29,14 +29,14 @@ git switch -C $UPDATE_BRANCH
 \cp -rf $DEST/scripts ./scripts
 \cp -f $DEST/Makefile ./
 \cp -f $DEST/.tool-versions ./
-\cp -f $DEST/VERSION ./
+\cp --update=none $DEST/VERSION ./
 \cp -f $DEST/.editorconfig ./
 \cp -f $DEST/.gitattributes ./
 \cp -f $DEST/.gitignore ./
 \cp -f $DEST/.gitleaksignore ./
 
 git add .
-export GPG_TTY=$(tty)
+#export GPG_TTY=$(tty)
 #git commit -m "Update default files from $REPO" || echo "No changes to commit"
 #git switch $CURRENT_BRANCH
 #git merge $UPDATE_BRANCH -m "Merge default files from $REPO"
