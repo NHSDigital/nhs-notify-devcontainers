@@ -13,13 +13,14 @@ echo "Cloning $REPO into $DEST"
 REPO=https://github.com/NHSDigital/nhs-notify-repository-template.git
 DEST=$HOME/nhsengland/repository-template
 CURRENT_TIMESTAMP=$(date +%Y%m%d%H%M%S)
+CHECKOUT_BRANCH="devcontainer-base"
 UPDATE_BRANCH="updating-the-default-files-$CURRENT_TIMESTAMP"
 
 mkdir -p $DEST
 echo "created destination directory $DEST"
 echo "Cloning repository from $REPO to $DEST"
-git clone $REPO $DEST
-echo "cloned repository $REPO to $DEST"
+git clone -b $CHECKOUT_BRANCH $REPO $DEST
+echo "cloned repository $REPO branch $CHECKOUT_BRANCH to $DEST"
 
 CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
 echo "current branch is $CURRENT_BRANCH"
@@ -56,6 +57,6 @@ echo "make config complete"
 cd $CURRENT_DIR
 
 echo "sorting certs"
-sudo cp -nr /home/ca-certificates/. /usr/local/share/ca-certificates
+sudo cp -r --update=none /home/ca-certificates/. /usr/local/share/ca-certificates
 sudo update-ca-certificates
 echo "sorted certs"
