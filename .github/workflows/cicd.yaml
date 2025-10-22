@@ -20,6 +20,8 @@ env:
   org: NHSDigital
   repository: nhs-notify-devcontainers
   vendor: NHS England
+  node_version: 24
+  temp_dockerfile: /tmp/Dockerfile.source
 
   # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
@@ -32,12 +34,10 @@ jobs:
         include:
           - container_name: base
             image: nhsdigital/nhs-notify-devcontainer-base
-            version: latest
             title: NHS Notifiy Devcontainer Base Image
             description: Base development container for NHS Notify projects
           - container_name: loaded
             image: nhsdigital/nhs-notify-devcontainer-loaded
-            version: latest
             title: NHS Notifiy Devcontainer Loaded Image
             description: Loaded development container for NHS Notify projects
 
@@ -62,7 +62,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: ${{ env.node_version }}
 
       - name: Build
         working-directory: ${{env.base_dir}}/${{ matrix.container_name }}
@@ -96,14 +96,14 @@ jobs:
 
       # So we don't rebuild the container image, we create a simple Dockerfile that uses the previously built image as its source.
       - name: create temp dockerfile source
-        run: echo 'FROM ${{ env.registry }}/${{ matrix.image }}' > /tmp/Dockerfile.source
+        run: echo 'FROM ${{ env.registry }}/${{ matrix.image }}' > ${{ env.temp_dockerfile }}
 
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
-          file: /tmp/Dockerfile.source
+          file: ${{ env.temp_dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
