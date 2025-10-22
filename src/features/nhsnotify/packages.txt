@@ -5,7 +5,7 @@ fonts-liberation
 gdb
 inetutils-inetd
 lcov
-libasound2
+libasound2t64
 libatk-adaptor
 libatk-bridge2.0-0
 libatk1.0-0
@@ -24,7 +24,6 @@ libgdbm-dev
 libglib2.0-0
 libgtk-3-0
 liblzma-dev
-libmpdec-dev
 libncurses5-dev
 libncursesw5-dev
 libnspr4

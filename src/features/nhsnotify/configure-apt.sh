@@ -7,5 +7,5 @@ apt-get update
 echo "Packages to be installed:"
 cat packages.txt
 echo "Starting APT packages installation"
-apt-get --install-suggests --install-recommends -y install < packages.txt
+cat packages.txt | xargs sudo apt-get install -y --install-suggests --install-recommends
 echo "APT packages installation complete"
