@@ -1,11 +1,12 @@
 {
     "name": "NHS Notify Fully Loaded Developer Container",
-    "image": "ghcr.io/nhsdigital/nhs-notify-devcontainer-default:latest",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
     "postCreateCommand": "echo Loaded Created",
     "postStartCommand": "echo Loaded Started",
     "features": {
-        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.11": {
-        }
+        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0": {}
     },
     "runArgs": [
         "--platform=linux/amd64"
@@ -13,71 +14,11 @@
     "forwardPorts": [
         4000
     ],
-    
     "containerEnv": {
         "UPDATEFROMTEMPLATE": "true",
-        "SHOWWELCOME": "true"
+        "SHOWWELCOME": "true",
+        "MAKECONFIG": "true"
     },
     "initializeCommand": "touch $HOME/.gitconfig && mkdir -p $HOME/.aws || true && mkdir -p $HOME/.gnupg || true && mkdir -p $HOME/.ssh || true",
-
-    "mounts": [
-        "source=/usr/local/share/ca-certificates,target=/home/ca-certificates,type=bind,consistency=cached",
-        "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
-        "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
-        "source=${localEnv:HOME}/.gnupg,target=/home/vscode/.gnupg,type=bind,consistency=cached",
-        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
-    ],
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "alefragnani.bookmarks",
-                "AmazonWebServices.aws-toolkit-vscode",
-                "chdsbd.github-code-owners",
-                "davidanson.vscode-markdownlint",
-                "dbaeumer.vscode-eslint",
-                "donjayamanne.githistory",
-                "editorconfig.editorconfig",
-                "esbenp.prettier-vscode",
-                "fvclaus.sort-json-array",
-                "github.codespaces",
-                "github.github-vscode-theme",
-                "github.remotehub",
-                "github.vscode-github-actions",
-                "github.vscode-pull-request-github",
-                "hediet.vscode-drawio",
-                "johnpapa.vscode-peacock",
-                "joshx.workspace-terminals",
-                "maattdd.gitless",
-                "mhutchie.git-graph",
-                "ms-azuretools.vscode-docker",
-                "ms-vscode-remote.remote-containers",
-                "ms-vscode-remote.remote-wsl",
-                "ms-vscode.hexeditor",
-                "ms-vscode.live-server",
-                "ms-vsliveshare.vsliveshare",
-                "redhat.vscode-xml",
-                "streetsidesoftware.code-spell-checker-british-english",
-                "takumii.markdowntable",
-                "tamasfe.even-better-toml",
-                "tomoki1207.pdf",
-                "vscode-icons-team.vscode-icons",
-                "vstirbu.vscode-mermaid-preview",
-                "wayou.vscode-todo-highlight",
-                "yzane.markdown-pdf",
-                "yzhang.dictionary-completion",
-                "yzhang.markdown-all-in-one",
-                "zoma.vscode-auto-open-workspace"
-            ],
-            "settings": {
-                "[makefile]": {
-                    "editor.detectIndentation": false,
-                    "editor.insertSpaces": false
-                },
-                "autoOpenWorkspace.enableAutoOpenIfSingleWorkspace": true,
-                "editor.formatOnSave": true,
-                "extensions.ignoreRecommendations": true,
-                "files.insertFinalNewline": true
-            }
-        }
-    }
+  
 }

@@ -1,11 +1,12 @@
 {
     "containerEnv": {
         "UPDATEFROMTEMPLATE": "true",
-        "SHOWWELCOME": "true"
+        "SHOWWELCOME": "true",
+        "MAKECONFIG": "true"
     },
     "id": "nhsnotify",
     "name": "NHS Notify",
-    "version": "1.0.11",
+    "version": "1.0.12",
     "dependsOn": {
         "ghcr.io/devcontainers/features/common-utils:2.5.4": {
             "configureZshAsDefaultShell": true,
@@ -18,6 +19,66 @@
             "username": "automatic"
         }
     },
-    "postCreateCommand": "zsh /usr/local/share/nhsnotify/scripts/postcreatecommand.sh",
-    "postStartCommand": "zsh /usr/local/share/nhsnotify/scripts/poststartcommand.sh"
+    "postCreateCommand": ["/usr/local/share/nhsnotify/scripts/postcreatecommand.sh"],
+    "postStartCommand": ["/usr/local/share/nhsnotify/scripts/poststartcommand.sh"],
+    "mounts": [
+        {"source": "/usr/local/share/ca-certificates", "target": "/home/ca-certificates", "type": "bind"},
+        {"source": "${localEnv:HOME}/.aws", "target": "/home/vscode/.aws", "type": "bind"},
+        {"source": "${localEnv:HOME}/.gitconfig", "target": "/home/vscode/.gitconfig", "type": "bind"},
+        {"source": "${localEnv:HOME}/.gnupg", "target": "/home/vscode/.gnupg", "type": "bind"},
+        {"source": "${localEnv:HOME}/.ssh", "target": "/home/vscode/.ssh", "type": "bind"}
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "alefragnani.bookmarks",
+                "AmazonWebServices.aws-toolkit-vscode",
+                "chdsbd.github-code-owners",
+                "davidanson.vscode-markdownlint",
+                "dbaeumer.vscode-eslint",
+                "donjayamanne.githistory",
+                "editorconfig.editorconfig",
+                "esbenp.prettier-vscode",
+                "fvclaus.sort-json-array",
+                "github.codespaces",
+                "github.github-vscode-theme",
+                "github.remotehub",
+                "github.vscode-github-actions",
+                "github.vscode-pull-request-github",
+                "hediet.vscode-drawio",
+                "johnpapa.vscode-peacock",
+                "joshx.workspace-terminals",
+                "maattdd.gitless",
+                "mhutchie.git-graph",
+                "ms-azuretools.vscode-docker",
+                "ms-vscode-remote.remote-containers",
+                "ms-vscode-remote.remote-wsl",
+                "ms-vscode.hexeditor",
+                "ms-vscode.live-server",
+                "ms-vsliveshare.vsliveshare",
+                "redhat.vscode-xml",
+                "streetsidesoftware.code-spell-checker-british-english",
+                "takumii.markdowntable",
+                "tamasfe.even-better-toml",
+                "tomoki1207.pdf",
+                "vscode-icons-team.vscode-icons",
+                "vstirbu.vscode-mermaid-preview",
+                "wayou.vscode-todo-highlight",
+                "yzane.markdown-pdf",
+                "yzhang.dictionary-completion",
+                "yzhang.markdown-all-in-one",
+                "zoma.vscode-auto-open-workspace"
+            ],
+            "settings": {
+                "[makefile]": {
+                    "editor.detectIndentation": false,
+                    "editor.insertSpaces": false
+                },
+                "autoOpenWorkspace.enableAutoOpenIfSingleWorkspace": true,
+                "editor.formatOnSave": true,
+                "extensions.ignoreRecommendations": true,
+                "files.insertFinalNewline": true
+            }
+        }
+    }
 }
