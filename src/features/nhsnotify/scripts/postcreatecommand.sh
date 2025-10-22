@@ -75,7 +75,7 @@ update_from_template(){
     echo "$REPO template update complete"
 }
 
-update_from_template_if_enabled(){
+execute_update_from_template(){
     if [ "${update_from_template}" == "true" ]; then
         echo "Updating from template as per configuration"
         get_repo_template
@@ -117,10 +117,14 @@ add_gpg_tty_to_zshrc(){
     echo "added gpg tty to zshrc"
 }
 
-update_from_template_if_enabled
+echo "starting post create command script"
+
+execute_update_from_template
 reload_shell
 add_asdf_to_path
 sort_certs
 configure_ohmyzsh
 add_gpg_tty_to_zshrc
 cd $CURRENT_DIR
+
+echo "completed post create command script"
