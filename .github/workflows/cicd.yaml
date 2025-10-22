@@ -68,6 +68,10 @@ jobs:
             image: nhsdigital/nhs-notify-devcontainer-base
             title: NHS Notifiy Devcontainer Base Image
             description: Base development container for NHS Notify projects
+          - container_name: default
+            image: nhsdigital/nhs-notify-devcontainer-default
+            title: NHS Notifiy Devcontainer Default Image
+            description: Default development container for NHS Notify projects
           - container_name: loaded
             image: nhsdigital/nhs-notify-devcontainer-loaded
             title: NHS Notifiy Devcontainer Loaded Image
