@@ -1,4 +1,4 @@
-IMAGE_NAME = ghcr.io/nhsdigital/nhs-notify-devcontainer-base
+IMAGE_NAME = ghcr.io/nhsdigital/nhs-notify-devcontainer-loaded
 VERSION = latest
 WORKSPACE_FOLDER = ./src
 

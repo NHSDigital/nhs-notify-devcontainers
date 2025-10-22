@@ -1,0 +1,17 @@
+{
+    "image": "ghcr.io/nhsdigital/nhs-notify-devcontainer-base:latest",
+    "features": {
+        "./nhsnotify": {
+            "version": "1.0.1",
+            "updateFromTemplate": true,
+            "showWelcome": true
+        }
+    },
+    "runArgs": [
+        "--platform=linux/amd64"
+    ],
+    "forwardPorts": [
+        4000
+    ],
+    "name": "NHS Notify Fully Loaded Developer Container"
+}
