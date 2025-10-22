@@ -1,6 +1,8 @@
 {
     "name": "NHS Notify Fully Loaded Developer Container",
     "image": "ghcr.io/nhsdigital/nhs-notify-devcontainer-default:latest",
+    "postCreateCommand": "echo Loaded Created",
+    "postStartCommand": "echo Loaded Started",
     "features": {
         "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.11": {
         }

@@ -7,4 +7,5 @@ build:
 	devcontainer build \
 	--push false \
 	--workspace-folder $(WORKSPACE_FOLDER) \
-	--image-name "$(IMAGE_NAME)"
+	--image-name "$(IMAGE_NAME)" \
+	--label "devcontainer.metadata=[{\"containerEnv\": { \"NOTIFY_USE_BASE\": \"true\" }}]"

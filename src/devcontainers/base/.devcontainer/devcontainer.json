@@ -1,8 +1,11 @@
 {
-    "build": {
+
+    "name": "NHS Notify Default Base Developer Container",
+    "postCreateCommand": "echo Base Created",
+    "postStartCommand": "echo Base Started",
+        "build": {
         "dockerfile": "Dockerfile"
     },
-    "name": "NHS Notify Default Base Developer Container",
     "runArgs": [
         "--platform=linux/amd64"
     ]

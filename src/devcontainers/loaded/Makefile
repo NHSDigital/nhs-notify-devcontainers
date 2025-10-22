@@ -8,5 +8,5 @@ build:
 	--push false \
 	--workspace-folder $(WORKSPACE_FOLDER) \
 	--image-name "$(IMAGE_NAME)" \
-	--label "devcontainer.metadata=[{\"containerEnv\": { \"CUSTOM_VARIABLE\": \"Testing a variable\" }}]"
+	--label "devcontainer.metadata=[{\"containerEnv\": { \"NOTIFY_USE_LOADED\": \"true\" }}]"
 

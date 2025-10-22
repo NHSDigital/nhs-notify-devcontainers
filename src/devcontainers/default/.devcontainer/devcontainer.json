@@ -1,5 +1,11 @@
 {
+    "name": "NHS Notify Default Developer Container",
     "image": "ghcr.io/nhsdigital/nhs-notify-devcontainer-base:latest",
+    "postCreateCommand": "echo Default Created",
+    "postStartCommand": "echo Default Started",
+    "runArgs": [
+        "--platform=linux/amd64"
+    ],
     "features": {
         "ghcr.io/devcontainers/features/python:1.7.1": {
             "version": "3.13.8",
@@ -41,6 +47,5 @@
         "ghcr.io/devcontainers/features/go:1.3.2": {
             "version": "1.25.3"
         }
-    },
-    "name": "NHS Notify Default Developer Container"
+    }
 }

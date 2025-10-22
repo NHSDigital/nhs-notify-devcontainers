@@ -1,6 +1,6 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:4.0.1-22-bullseye",
-   "features": {
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:4.0.1-22-bullseye",
+    "features": {
         "ghcr.io/devcontainers/features/docker-in-docker:2": {
             "azureDnsAutoDetection": true,
             "dockerDashComposeVersion": "latest",
@@ -8,6 +8,16 @@
             "installDockerComposeSwitch": true,
             "moby": true,
             "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/common-utils:2.5.4": {
+            "configureZshAsDefaultShell": true,
+            "installOhMyZsh": true,
+            "installOhMyZshConfig": true,
+            "installZsh": true,
+            "upgradePackages": true,
+            "userGid": "automatic",
+            "userUid": "automatic",
+            "username": "automatic"
         }
     }
 }
