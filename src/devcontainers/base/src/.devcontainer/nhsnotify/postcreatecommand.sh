@@ -21,17 +21,29 @@ CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
 echo "current branch is $CURRENT_BRANCH"
 git switch -C $UPDATE_BRANCH
 
-\cp -r --update=none $DEST/docs ./
-\cp -r --update=none $DEST/infrastructure ./
+copy_folder_if_not_exists(){
+    local FOLDER=$1
+    echo "checking for folder $FOLDER"
+    mkdir -p $DEST/$FOLDER && \
+    \cp -r --update=none $DEST/$FOLDER ./ && \
+    echo "Copied $FOLDER" \
+    || echo "Not copying $FOLDER, already exist"
+}
+copy_folder_if_not_exists ".github"
+copy_folder_if_not_exists "docs"
+copy_folder_if_not_exists "infrastructure"
+copy_folder_if_not_exists ".vscode"
+
 \cp -rf $DEST/scripts ./
 \cp -f $DEST/Makefile ./
 \cp -f $DEST/.tool-versions ./
-\cp --update=none $DEST/VERSION ./
 \cp -f $DEST/.editorconfig ./
 \cp -f $DEST/.gitattributes ./
 \cp -f $DEST/.gitignore ./
 \cp -f $DEST/.gitleaksignore ./
-
+\cp --update=none $DEST/VERSION ./
+\cp --update=none $DEST/README.md ./
+\cp --update=none $DEST/LICENCE.md ./
 
 echo "$REPO template complete"
 
