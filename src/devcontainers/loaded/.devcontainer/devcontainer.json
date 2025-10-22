@@ -6,7 +6,7 @@
     "postCreateCommand": "echo Loaded Created",
     "postStartCommand": "echo Loaded Started",
     "features": {
-        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.13": {}
+        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.14": {}
     },
     "runArgs": [
         "--platform=linux/amd64"
@@ -17,7 +17,8 @@
     "containerEnv": {
         "UPDATEFROMTEMPLATE": "true",
         "SHOWWELCOME": "true",
-        "MAKECONFIG": "true"
+        "MAKECONFIG": "true",
+        "GITHUBMONITOR": "true"
     },
     "initializeCommand": "touch $HOME/.gitconfig && mkdir -p $HOME/.aws || true && mkdir -p $HOME/.gnupg || true && mkdir -p $HOME/.ssh || true",
   
