@@ -49,7 +49,7 @@
     "name": "NHS Notify",
     "postCreateCommand": "zsh /usr/local/share/nhsnotify/scripts/postcreatecommand.sh",
     "postStartCommand": "zsh /usr/local/share/nhsnotify/scripts/poststartcommand.sh",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "customizations": {
         "vscode": {
             "extensions": [
