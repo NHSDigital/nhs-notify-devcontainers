@@ -162,5 +162,5 @@ jobs:
         with:
           subject-name: ${{ env.registry }}/${{ matrix.image }}
           subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+          push-to-registry: false
       
