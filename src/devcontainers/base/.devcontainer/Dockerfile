@@ -6,3 +6,9 @@ LABEL org.opencontainers.image.vendor="NHS England"
 LABEL org.opencontainers.image.licenses=MIT
 LABEL org.opencontainers.image.title="NHS Digital Notify Base Dev Container"
 LABEL org.opencontainers.image.description="Base Dev Container for NHS Digital Notify development environments"
+
+
+COPY scripts /usr/local/share/nhsnotify-base
+
+WORKDIR /usr/local/share/nhsnotify-base
+RUN ./install.sh

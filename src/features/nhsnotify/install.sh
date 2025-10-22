@@ -18,10 +18,6 @@ echo "Setup share dir, contents:"
 pwd $SHARE_DIR
 ls -la $SHARE_DIR
 
-echo "Configuring APT packages"
-./configure-apt.sh
-echo "APT packages configured"
-
 echo "go is at $(which go)"
 echo 'install asdf via go'
 go install github.com/asdf-vm/asdf/cmd/asdf@v0.18.0
