@@ -6,7 +6,7 @@
     },
     "id": "nhsnotify",
     "name": "NHS Notify",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "dependsOn": {
         "ghcr.io/devcontainers/features/common-utils:2.5.4": {
             "configureZshAsDefaultShell": true,
