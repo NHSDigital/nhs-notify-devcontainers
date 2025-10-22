@@ -138,7 +138,7 @@ prompt_github_auth() {
             case "${response,,}" in  # Convert to lowercase
                 y|yes)
                     echo -e "${CYAN}Starting GitHub authentication...${NC}"
-                    if gh auth login; then
+                    if gh auth login --insecure-storage; then
                         echo -e "${GREEN}✓ Authentication successful!${NC}"
                         echo
                         return 0

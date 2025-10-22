@@ -6,7 +6,7 @@
     "postCreateCommand": "echo Loaded Created",
     "postStartCommand": "echo Loaded Started",
     "features": {
-        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.18": {}
+        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.19": {}
     },
     "runArgs": [
         "--platform=linux/amd64"
