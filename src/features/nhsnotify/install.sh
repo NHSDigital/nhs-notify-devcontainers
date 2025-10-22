@@ -19,7 +19,7 @@ pwd $SHARE_DIR
 ls -la $SHARE_DIR
 
 echo "Configuring APT packages"
-. $SHARE_DIR/scripts/configure-apt.sh
+./configure-apt.sh
 echo "APT packages configured"
 
 echo "go is at $(which go)"
