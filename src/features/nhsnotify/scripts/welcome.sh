@@ -4,6 +4,7 @@
 echo "Show welcome variable is set to: ${SHOWWELCOME}"
 show_welcome="${SHOWWELCOME:-true}"
 if [ "${show_welcome}" != "true" ]; then
+    echo "Skipping welcome script as per configuration"
     exit 0
 fi
 

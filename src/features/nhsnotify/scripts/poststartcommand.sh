@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "running make config"
-export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
-make config
-echo "make config complete"
-
+echo "NHS Notify Feature starting post start command script"
+/usr/local/share/nhsnotify/scripts/makeconfig.sh
 /usr/local/share/nhsnotify/scripts/welcome.sh
+/usr/local/share/nhsnotify/scripts/github-monitor.sh -d
+
+echo "NHS Notify Feature finished post start command script"

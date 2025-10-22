@@ -20,7 +20,10 @@ get_repo_template(){
     echo "Cloning repository from $REPO to $DEST"
     git clone -b $CHECKOUT_BRANCH $REPO $DEST
     echo "cloned repository $REPO branch $CHECKOUT_BRANCH to $DEST"
+}
 
+switch_to_update_branch(){
+    echo "switching to update branch $UPDATE_BRANCH"
     CURRENT_BRANCH=$(git symbolic-ref --short HEAD)
     echo "current branch is $CURRENT_BRANCH"
     git switch -C $UPDATE_BRANCH
@@ -79,20 +82,16 @@ update_from_template(){
 }
 
 execute_update_from_template(){
-    if [ "${update_from_template}" == "true" ]; then
+    if [ "${update_from_template}" = "true" ]; then
         echo "Updating from template as per configuration"
         get_repo_template
+        switch_to_update_branch
         update_from_template
     else
         echo "Skipping update from template as per configuration"
     fi
 }
 
-reload_shell(){
-    echo "reload shell"
-    source ~/.zshrc
-    echo "reloaded shell"
-}
 
 add_asdf_to_path(){
     echo "adding asdf to path"
@@ -108,9 +107,20 @@ sort_certs(){
 
 configure_ohmyzsh(){
     echo "configuring ohmyzsh"
-    echo 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' >> ~/.zshrc
-    sed -i "/plugins=/c\plugins=(git ssh-agent sudo terraform dirhistory)" ~/.zshrc
+    echo "############################################################"
+    echo "before ohmyzsh zshrc content:"
     cat ~/.zshrc
+    echo "############################################################"
+    echo ""
+
+    echo 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' >> ~/.zshrc
+    sed -i "/^plugins=/c\plugins=(git ssh-agent sudo terraform dirhistory)" ~/.zshrc
+    
+    echo "############################################################"
+    echo "after ohmyzsh zshrc content:"
+    cat ~/.zshrc
+    echo "############################################################"
+    echo ""
     echo "configured ohmyzsh"
 }
 
@@ -123,7 +133,6 @@ add_gpg_tty_to_zshrc(){
 echo "starting post create command script"
 
 execute_update_from_template
-reload_shell
 add_asdf_to_path
 sort_certs
 configure_ohmyzsh
