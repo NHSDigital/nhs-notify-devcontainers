@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check if SHOWWELCOME is set to true, exit if not
+show_welcome="${SHOWWELCOME:-true}"
+if [ "${show_welcome}" != "true" ]; then
+    exit 0
+fi
+
 # Configuration
 WEATHER_LOCATION="Leeds, UK"  # Change this to any location
 
