@@ -16,6 +16,7 @@ on:
 
 env:
   # Sets the Docker image tag to use for the image built in this workflow.
+  features_dir: src/features
   base_dir: src/devcontainers
   context: .devcontainer
   workspace_folder: .
@@ -40,12 +41,18 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v3
-
-      - name: "Publish Features"
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - '${{ env.features_dir }}/**'
+      - if: steps.changes.outputs.src == 'true'
+        name: "Publish Features"
         uses: devcontainers/action@v1
         with:
           publish-features: "true"
-          base-path-to-features: "./src/features"
+          base-path-to-features: "./${{ env.features_dir }}"
           generate-docs: "false"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,8 +91,14 @@ jobs:
           registry: ${{ env.registry }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/setup-node@v6
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - '${{env.base_dir}}/${{ matrix.container_name }}/**'
+      - if: steps.changes.outputs.src == 'true'
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.node_version }}
 
