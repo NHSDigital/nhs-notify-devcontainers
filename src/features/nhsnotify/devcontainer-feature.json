@@ -5,7 +5,19 @@
     },
     "id": "nhsnotify",
     "name": "NHS Notify",
-    "version": "1.0.10",
-    "postCreateCommand": "echo 'NHS Notify FEATURE: Post Create Command'"
-   
+    "version": "1.0.11",
+    "dependsOn": {
+        "ghcr.io/devcontainers/features/common-utils:2.5.4": {
+            "configureZshAsDefaultShell": true,
+            "installOhMyZsh": true,
+            "installOhMyZshConfig": true,
+            "installZsh": true,
+            "upgradePackages": true,
+            "userGid": "automatic",
+            "userUid": "automatic",
+            "username": "automatic"
+        }
+    },
+    "postCreateCommand": "zsh /usr/local/share/nhsnotify/scripts/postcreatecommand.sh",
+    "postStartCommand": "zsh /usr/local/share/nhsnotify/scripts/poststartcommand.sh"
 }

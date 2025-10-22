@@ -1,9 +1,8 @@
 {
+    "name": "NHS Notify Fully Loaded Developer Container",
     "image": "ghcr.io/nhsdigital/nhs-notify-devcontainer-default:latest",
     "features": {
-        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0": {
-            "updateFromTemplate": true,
-            "showWelcome": true
+        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.11": {
         }
     },
     "runArgs": [
@@ -12,14 +11,13 @@
     "forwardPorts": [
         4000
     ],
-    "name": "NHS Notify Fully Loaded Developer Container",
+    
     "containerEnv": {
         "UPDATEFROMTEMPLATE": "true",
         "SHOWWELCOME": "true"
     },
     "initializeCommand": "touch $HOME/.gitconfig && mkdir -p $HOME/.aws || true && mkdir -p $HOME/.gnupg || true && mkdir -p $HOME/.ssh || true",
-    "postCreateCommand": "zsh /usr/local/share/nhsnotify/scripts/postcreatecommand.sh",
-    "postStartCommand": "zsh /usr/local/share/nhsnotify/scripts/poststartcommand.sh",
+
     "mounts": [
         "source=/usr/local/share/ca-certificates,target=/home/ca-certificates,type=bind,consistency=cached",
         "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached",
@@ -27,7 +25,7 @@
         "source=${localEnv:HOME}/.gnupg,target=/home/vscode/.gnupg,type=bind,consistency=cached",
         "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
     ],
-     "customizations": {
+    "customizations": {
         "vscode": {
             "extensions": [
                 "alefragnani.bookmarks",
