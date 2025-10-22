@@ -2,11 +2,8 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
-    
     "name": "NHS Notify Default Base Developer Container",
     "runArgs": [
         "--platform=linux/amd64"
-    ],
-    "initializeCommand": "touch $HOME/.gitconfig && mkdir -p $HOME/.aws || true && mkdir -p $HOME/.gnupg || true && mkdir -p $HOME/.ssh || true",
- 
+    ]
 }
