@@ -67,7 +67,7 @@ jobs:
       - name: Build
         working-directory: ${{env.base_dir}}/${{ matrix.container_name }}
         run: |
-          make build IMAGE_NAME=${{ env.registry }}/${{ matrix.image }} VERSION=${{ matrix.version }} WORKSPACE_FOLDER=${{ env.workspace_folder }}
+          make build IMAGE_NAME=${{ env.registry }}/${{ matrix.image }} WORKSPACE_FOLDER=${{ env.workspace_folder }}
 
 
       # This step uses [docker/metadata-action](https://github.com/docker/metadata-action#about) to extract tags and labels that will be applied to the specified image. The `id` "meta" allows the output of this step to be referenced in a subsequent step. The `images` value provides the base name for the tags and labels.
@@ -80,6 +80,13 @@ jobs:
             latest=auto
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
+            type=schedule
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha            
           labels: |
             org.opencontainers.image.title= ${{ matrix.title }}
             org.opencontainers.image.description=${{ matrix.description }}
@@ -88,8 +95,8 @@ jobs:
             org.opencontainers.image.source=${{ env.server }}/${{ env.org }}/${{ env.repository }}/tree/main/${{ env.base_dir }}/${{matrix.container_name}}/
 
       # So we don't rebuild the container image, we create a simple Dockerfile that uses the previously built image as its source.
-      - run: echo 'FROM ${{ env.registry }}/${{ matrix.image }}' > /tmp/Dockerfile.source
-
+      - name: create temp dockerfile source
+        run: echo 'FROM ${{ env.registry }}/${{ matrix.image }}' > /tmp/Dockerfile.source
 
       - name: Build and push Docker image
         id: push
