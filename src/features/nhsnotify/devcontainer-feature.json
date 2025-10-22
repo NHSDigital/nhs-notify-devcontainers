@@ -7,7 +7,7 @@
     },
     "id": "nhsnotify",
     "name": "NHS Notify",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "dependsOn": {
         "ghcr.io/devcontainers/features/common-utils:2.5.4": {
             "configureZshAsDefaultShell": true,
@@ -20,14 +20,48 @@
             "username": "automatic"
         }
     },
-    "postCreateCommand": ["/usr/local/share/nhsnotify/scripts/postcreatecommand.sh"],
-    "postStartCommand": ["/usr/local/share/nhsnotify/scripts/poststartcommand.sh"],
+    "postCreateCommand": [
+        "/usr/local/share/nhsnotify/scripts/postcreatecommand.sh"
+    ],
+    "postStartCommand": [
+        "/usr/local/share/nhsnotify/scripts/poststartcommand.sh"
+    ],
     "mounts": [
-        {"source": "/usr/local/share/ca-certificates", "target": "/home/ca-certificates", "type": "bind"},
-        {"source": "${localEnv:HOME}/.aws", "target": "/home/vscode/.aws", "type": "bind"},
-        {"source": "${localEnv:HOME}/.gitconfig", "target": "/home/vscode/.gitconfig", "type": "bind"},
-        {"source": "${localEnv:HOME}/.gnupg", "target": "/home/vscode/.gnupg", "type": "bind"},
-        {"source": "${localEnv:HOME}/.ssh", "target": "/home/vscode/.ssh", "type": "bind"}
+        {
+            "source": "/usr/local/share/ca-certificates",
+            "target": "/home/ca-certificates",
+            "type": "bind"
+        },
+        {
+            "source": "${localEnv:HOME}/.aws",
+            "target": "/home/vscode/.aws",
+            "type": "bind"
+        },
+        {
+            "source": "${localEnv:HOME}/.gitconfig",
+            "target": "/home/vscode/.gitconfig",
+            "type": "bind"
+        },
+        {
+            "source": "${localEnv:HOME}/.gnupg",
+            "target": "/home/vscode/.gnupg",
+            "type": "bind"
+        },
+        {
+            "source": "${localEnv:HOME}/.ssh",
+            "target": "/home/vscode/.ssh",
+            "type": "bind"
+        },
+        {
+            "source": "${localEnv:HOME}/.ssh",
+            "target": "/home/vscode/.ssh",
+            "type": "bind"
+        },
+        {
+            "source": "${localEnv:HOME}/.config/gh/hosts.yml",
+            "target": "/home/vscode/.config/gh/hosts.yml",
+            "type": "bind"
+        }
     ],
     "customizations": {
         "vscode": {
