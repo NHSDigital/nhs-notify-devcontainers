@@ -1,5 +1,8 @@
 #!/bin/bash
 CURRENT_DIR=$(pwd)
+
+echo "Starting post create command script"
+echo "Update from template variable is set to: ${UPDATEFROMTEMPLATE}"
 update_from_template="${UPDATEFROMTEMPLATE:-true}"
 
 REPO=https://github.com/NHSDigital/nhs-notify-repository-template.git

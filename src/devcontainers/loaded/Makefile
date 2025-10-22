@@ -7,4 +7,7 @@ build:
 	devcontainer build \
 	--push false \
 	--workspace-folder $(WORKSPACE_FOLDER) \
-	--image-name "$(IMAGE_NAME)"
+	--image-name "$(IMAGE_NAME)" \
+	--no-cache \
+	--label "devcontainer.metadata=[{\"containerEnv\": { \"CUSTOM_VARIABLE\": \"Testing a variable\" }}]"
+

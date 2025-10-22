@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Check if SHOWWELCOME is set to true, exit if not
+echo "Show welcome variable is set to: ${SHOWWELCOME}"
 show_welcome="${SHOWWELCOME:-true}"
 if [ "${show_welcome}" != "true" ]; then
     exit 0

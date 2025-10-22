@@ -1,7 +1,7 @@
 {
     "image": "ghcr.io/nhsdigital/nhs-notify-devcontainer-base:latest",
     "features": {
-        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.1": {
+        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0": {
             "updateFromTemplate": true,
             "showWelcome": true
         }
@@ -12,5 +12,10 @@
     "forwardPorts": [
         4000
     ],
-    "name": "NHS Notify Fully Loaded Developer Container"
+    "name": "NHS Notify Fully Loaded Developer Container",
+
+    "containerEnv": {
+        "UPDATEFROMTEMPLATE": "true",
+        "SHOWWELCOME": "true"
+    }
 }

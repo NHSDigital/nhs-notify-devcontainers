@@ -1,4 +1,5 @@
 #!/bin/bash
+SHARE_DIR="/usr/local/share/nhsnotify"
 
 add_asdf_to_path(){
     echo "adding asdf to path"
@@ -8,7 +9,7 @@ add_asdf_to_path(){
 
 echo "Starting NHS Notify feature installation script"
 
-SHARE_DIR="/usr/local/share/nhsnotify"
+
 echo "Share dir is $SHARE_DIR"
 mkdir -p $SHARE_DIR
 cp -r ./scripts $SHARE_DIR
@@ -24,5 +25,10 @@ echo "APT packages configured"
 echo "go is at $(which go)"
 echo 'install asdf via go'
 go install github.com/asdf-vm/asdf/cmd/asdf@v0.18.0
+
+
 add_asdf_to_path
+
+
+
 echo "Finished NHS Notify feature installation script"

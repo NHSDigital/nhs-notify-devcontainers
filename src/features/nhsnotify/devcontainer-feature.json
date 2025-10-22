@@ -1,4 +1,8 @@
 {
+    "containerEnv": {
+        "UPDATEFROMTEMPLATE": "true",
+        "SHOWWELCOME": "true"
+    },
     "dependsOn": {
         "ghcr.io/devcontainers/features/python:1.7.1": {
             "version": "3.13.8",
@@ -45,7 +49,7 @@
     "name": "NHS Notify",
     "postCreateCommand": "zsh /usr/local/share/nhsnotify/scripts/postcreatecommand.sh",
     "postStartCommand": "zsh /usr/local/share/nhsnotify/scripts/poststartcommand.sh",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -97,18 +101,6 @@
                 "extensions.ignoreRecommendations": true,
                 "files.insertFinalNewline": true
             }
-        }
-    },
-    "options": {
-        "updateFromTemplate": {
-            "type": "boolean",
-            "description": "Update from template",
-            "default": true
-        },
-        "showWelcome": {
-            "type": "boolean",
-            "description": "Show welcome message",
-            "default": true
         }
     },
     "mounts": [
