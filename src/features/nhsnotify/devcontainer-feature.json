@@ -5,7 +5,7 @@
     },
     "id": "nhsnotify",
     "name": "NHS Notify",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "postCreateCommand": "echo 'NHS Notify FEATURE: Post Create Command'"
    
 }
