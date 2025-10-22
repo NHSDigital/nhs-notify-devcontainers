@@ -1,5 +1,5 @@
 IMAGE_NAME = ghcr.io/nhsdigital/nhs-notify-devcontainer-base
-WORKSPACE_FOLDER = ./src
+WORKSPACE_FOLDER = .
 
 build:
 	npm install -g @devcontainers/cli && \

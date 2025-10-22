@@ -1,0 +1,21 @@
+{
+  "id": "loaded",
+  "version": "1.0.0",
+  "name": "My Favorite Color",
+  "description": "A Template to remind you of your favorite color",
+  "documentationURL": "https://github.com/NHSDigital/nhs-notify-devcontainers",
+  "licenseURL": "https://github.com/NHSDigital/nhs-notify-devcontainers/LICENSE",
+  "options": {
+    "updateFromTemplate": {
+      "type": "boolean",
+      "description": "Update from template",
+      "default": true
+    },
+    "showWelcome": {
+      "type": "boolean",
+      "description": "Show welcome message",
+      "default": true
+    }
+  },
+  "platforms": ["Any"]
+}
