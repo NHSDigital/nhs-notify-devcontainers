@@ -118,7 +118,9 @@ jobs:
         name: Build lock base image tags to same version
         working-directory: ${{env.base_dir}}/${{ matrix.container_name }}
         run: |
-          make build BASE_IMAGE_TAG=${${{ github.ref_name }}#v} IMAGE_NAME=${{ env.registry }}/${{ env.image_prefix }}${{ matrix.container_name }} WORKSPACE_FOLDER=${{ env.workspace_folder }}
+          TAG=${{ github.ref_name }}
+          TAG_VERSION=${TAG#v}
+          make build BASE_IMAGE_TAG=$TAG_VERSION IMAGE_NAME=${{ env.registry }}/${{ env.image_prefix }}${{ matrix.container_name }} WORKSPACE_FOLDER=${{ env.workspace_folder }}
         
 
       - if: steps.changes.outputs.src == 'true' || startsWith(github.ref, 'refs/tags/v')
