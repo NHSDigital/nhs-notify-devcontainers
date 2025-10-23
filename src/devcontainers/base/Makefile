@@ -1,21 +1,34 @@
-IMAGE_NAME = ghcr.io/nhsdigital/nhs-notify-devcontainer-base
-WORKSPACE_FOLDER = .
+CONTAINER_PREFIX=ghcr.io/nhsdigital/nhs-notify-devcontainer-
+CONTAINER_NAME=base
+BASE_CONTAINER_PREFIX=mcr.microsoft.com/devcontainers/
+BASE_CONTAINER_NAME=base
+BASE_IMAGE_TAG=ubuntu-24.04
+IMAGE_NAME=${CONTAINER_PREFIX}$(CONTAINER_NAME)
+WORKSPACE_FOLDER=.
 
 build:
 	npm install -g @devcontainers/cli && \
 	BUILDKIT_PROGRESS=plain \
+	BASE_CONTAINER_NAME=$(BASE_CONTAINER_NAME) \
+	CONTAINER_NAME=$(CONTAINER_NAME) \
+	BASE_IMAGE_TAG=$(BASE_IMAGE_TAG) \
+	BASE_CONTAINER_PREFIX=$(BASE_CONTAINER_PREFIX) \
 	devcontainer build \
 	--push false \
 	--workspace-folder $(WORKSPACE_FOLDER) \
 	--image-name "$(IMAGE_NAME)" \
-	--label "devcontainer.metadata=[{\"containerEnv\": { \"NOTIFY_USE_BASE\": \"true\" }}]"
+	--label "devcontainer.metadata=[{\"containerEnv\": { \"NOTIFY_USE_$(CONTAINER_NAME)\": \"true\" }}]"
 
 build_no_cache:
 	npm install -g @devcontainers/cli && \
 	BUILDKIT_PROGRESS=plain \
+	BASE_CONTAINER_NAME=$(BASE_CONTAINER_NAME) \
+	CONTAINER_NAME=$(CONTAINER_NAME) \
+	BASE_IMAGE_TAG=$(BASE_IMAGE_TAG) \
+	BASE_CONTAINER_PREFIX=$(BASE_CONTAINER_PREFIX) \
 	devcontainer build \
 	--push false \
 	--workspace-folder $(WORKSPACE_FOLDER) \
 	--image-name "$(IMAGE_NAME)" \
 	--no-cache \
-	--label "devcontainer.metadata=[{\"containerEnv\": { \"NOTIFY_USE_BASE\": \"true\" }}]"
+	--label "devcontainer.metadata=[{\"containerEnv\": { \"NOTIFY_USE_$(CONTAINER_NAME)\": \"true\" }}]"

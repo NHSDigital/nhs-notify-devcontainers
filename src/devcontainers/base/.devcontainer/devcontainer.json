@@ -1,11 +1,18 @@
 {
-    "name": "nhs-notify-devcontainer-base",
-    "postCreateCommand": "echo Base Created",
-    "postStartCommand": "echo Base Started",
+    "name": "nhs-notify-devcontainer-${localEnv:CONTAINER_NAME}",
+    "postCreateCommand": "echo ${localEnv:CONTAINER_NAME} Created",
+    "postStartCommand": "echo ${localEnv:CONTAINER_NAME} Started",
     "build": {
-        "dockerfile": "Dockerfile"
+        "dockerfile": "Dockerfile",
+        "args": {
+            "CONTAINER_NAME": "${localEnv:CONTAINER_NAME}",
+            "BASE_CONTAINER_NAME": "${localEnv:BASE_CONTAINER_NAME}",
+            "BASE_IMAGE_TAG": "${localEnv:BASE_IMAGE_TAG}",
+            "BASE_CONTAINER_PREFIX": "${localEnv:BASE_CONTAINER_PREFIX}"
+        }
     },
     "runArgs": [
         "--platform=linux/amd64"
-    ]
+    ],
+    "remoteUser": "vscode"
 }

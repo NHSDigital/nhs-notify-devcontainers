@@ -1,17 +1,28 @@
 {
-    "name": "nhs-notify-devcontainer-default",
+    "name": "nhs-notify-devcontainer-${localEnv:CONTAINER_NAME}",
     "build": {
-        "dockerfile": "Dockerfile"
+        "dockerfile": "Dockerfile",
+        "args": {
+            "CONTAINER_NAME": "${localEnv:CONTAINER_NAME}",
+            "BASE_CONTAINER_NAME": "${localEnv:BASE_CONTAINER_NAME}",
+            "BASE_IMAGE_TAG": "${localEnv:BASE_IMAGE_TAG}",
+            "BASE_CONTAINER_PREFIX": "${localEnv:BASE_CONTAINER_PREFIX}"
+        }
     },
-    "postCreateCommand": "echo Default Created",
-    "postStartCommand": "echo Default Started",
+    "postCreateCommand": "echo ${localEnv:CONTAINER_NAME} Created",
+    "postStartCommand": "echo ${localEnv:CONTAINER_NAME} Started",
     "runArgs": [
         "--platform=linux/amd64"
-    ]
-    ,   "features": {
+    ],
+    "remoteUser": "vscode",
+    "features": {
         "ghcr.io/devcontainers/features/python:1.7.1": {
             "version": "3.13.8",
             "installTools": true
+        },
+        "ghcr.io/devcontainers-extra/features/zsh-plugins:0.0.5": {
+            "omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting.git https://github.com/MichaelAquilina/zsh-you-should-use.git",
+            "plugins": "git ssh-agent sudo terraform dirhistory docker asdf aws emoji you-should-use zsh-autosuggestions zsh-syntax-highlighting"
         },
         "ghcr.io/devcontainers/features/aws-cli:1.1.2": {
             "version": "2.31.18"

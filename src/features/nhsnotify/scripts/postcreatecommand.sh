@@ -114,7 +114,9 @@ configure_ohmyzsh(){
     echo ""
 
     echo 'export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"' >> ~/.zshrc
-    sed -i "/^plugins=/c\plugins=(git ssh-agent sudo terraform dirhistory)" ~/.zshrc
+    
+    # Moved to plugin feature on default dev container
+    #sed -i "/^plugins=/c\plugins=(git ssh-agent sudo terraform dirhistory)" ~/.zshrc
     
     echo "############################################################"
     echo "after ohmyzsh zshrc content:"
