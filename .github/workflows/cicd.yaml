@@ -108,11 +108,18 @@ jobs:
         with:
           node-version: ${{ env.node_version }}
 
-      - if: steps.changes.outputs.src == 'true' || startsWith(github.ref, 'refs/tags/v')
-        name: Build
+      - if: steps.changes.outputs.src == 'true' && !startsWith(github.ref, 'refs/tags/v')
+        name: Build default
         working-directory: ${{env.base_dir}}/${{ matrix.container_name }}
         run: |
           make build IMAGE_NAME=${{ env.registry }}/${{ env.image_prefix }}${{ matrix.container_name }} WORKSPACE_FOLDER=${{ env.workspace_folder }}
+
+      - if: startsWith(github.ref, 'refs/tags/v')
+        name: Build lock base image tags to same version
+        working-directory: ${{env.base_dir}}/${{ matrix.container_name }}
+        run: |
+          make build BASE_IMAGE_TAG=${${{ github.ref_name }}#v} IMAGE_NAME=${{ env.registry }}/${{ env.image_prefix }}${{ matrix.container_name }} WORKSPACE_FOLDER=${{ env.workspace_folder }}
+        
 
       - if: steps.changes.outputs.src == 'true' || startsWith(github.ref, 'refs/tags/v')
         name: Extract metadata (tags, labels) for Docker
@@ -123,7 +130,6 @@ jobs:
           flavor: |
             latest=auto
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
             type=schedule
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}

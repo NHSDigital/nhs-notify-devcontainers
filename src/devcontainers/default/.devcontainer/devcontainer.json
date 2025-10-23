@@ -22,7 +22,9 @@
         },
         "ghcr.io/devcontainers-extra/features/zsh-plugins:0.0.5": {
             "omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting.git https://github.com/MichaelAquilina/zsh-you-should-use.git",
-            "plugins": "git ssh-agent sudo terraform dirhistory docker asdf aws emoji you-should-use zsh-autosuggestions zsh-syntax-highlighting"
+            "plugins": "git ssh-agent gpg-agent python ubuntu ruby jsontools sudo bundler direnv gitignore encode64 gem copypath copyfile terraform dirhistory aliases z docker asdf aws emoji zsh-you-should-use zsh-autosuggestions zsh-syntax-highlighting"
+
+          
         },
         "ghcr.io/devcontainers/features/aws-cli:1.1.2": {
             "version": "2.31.18"
