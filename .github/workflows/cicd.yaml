@@ -65,10 +65,13 @@ jobs:
   check-if-changed:
       needs: deploy-nhs-notify-feature
       if: needs.deploy-nhs-notify-feature.result == 'success' || needs.deploy-nhs-notify-feature.result == 'skipped'
+      permissions:
+        contents: read   
       runs-on: ubuntu-latest
       outputs:
         src: ${{ steps.changes.outputs.src }}
       steps:
+      - uses: actions/checkout@v3    
       - uses: dorny/paths-filter@v3
         id: changes
         with:
