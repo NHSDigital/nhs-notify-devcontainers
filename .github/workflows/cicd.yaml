@@ -52,7 +52,7 @@ jobs:
               - '${{ env.features_dir }}/**'
               - '${{ env.workflow_path }}'
 
-      - if: steps.changes.outputs.src == 'true' || startsWith(github.ref, 'refs/tags/v')
+      - if: ${{steps.changes.outputs.src == 'true' || startsWith(github.ref, 'refs/tags/v')}}
         name: "Publish Features"
         uses: devcontainers/action@v1
         with:
@@ -64,7 +64,7 @@ jobs:
 
   check-if-changed:
       needs: deploy-nhs-notify-feature
-      if: needs.deploy-nhs-notify-feature.result == 'success' || needs.deploy-nhs-notify-feature.result == 'skipped'
+      if: ${{!cancelled() && (needs.deploy-nhs-notify-feature.result == 'success' || needs.deploy-nhs-notify-feature.result == 'skipped')}}
       permissions:
         contents: read   
       runs-on: ubuntu-latest
@@ -81,7 +81,7 @@ jobs:
               - '${{ env.workflow_path }}'
 
   build-and-push-image:
-    if: needs.check-if-changed.outputs.src == 'true' 
+    if: ${{ needs.check-if-changed.outputs.src == 'true' }}
     needs: check-if-changed
     runs-on: ubuntu-latest
     strategy:
@@ -120,14 +120,14 @@ jobs:
         with:
           node-version: ${{ env.node_version }}
 
-      - if: (!startsWith(github.ref, 'refs/tags/v'))
+      - if: ${{(!startsWith(github.ref, 'refs/tags/v'))}}
         name: Build default
         working-directory: ${{env.base_dir}}/${{ matrix.container_name }}
         run: |
           BRANCH=${{ github.ref_name }}
           make build BASE_IMAGE_TAG=$BRANCH IMAGE_NAME=${{ env.registry }}/${{ env.image_prefix }}${{ matrix.container_name }} WORKSPACE_FOLDER=${{ env.workspace_folder }}
 
-      - if: startsWith(github.ref, 'refs/tags/v')
+      - if: ${{startsWith(github.ref, 'refs/tags/v')}}
         name: Build lock base image tags to same version
         working-directory: ${{env.base_dir}}/${{ matrix.container_name }}
         run: |
