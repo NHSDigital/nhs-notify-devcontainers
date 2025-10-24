@@ -134,9 +134,9 @@ add_gpg_tty_to_zshrc(){
 
 echo "starting post create command script"
 
+sort_certs
 execute_update_from_template
 add_asdf_to_path
-sort_certs
 configure_ohmyzsh
 add_gpg_tty_to_zshrc
 cd $CURRENT_DIR
