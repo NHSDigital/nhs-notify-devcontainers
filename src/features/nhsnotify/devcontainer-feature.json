@@ -70,6 +70,7 @@
                 "github.remotehub",
                 "github.vscode-github-actions",
                 "github.vscode-pull-request-github",
+                "hashicorp.terraform",
                 "hediet.vscode-drawio",
                 "johnpapa.vscode-peacock",
                 "joshx.workspace-terminals",

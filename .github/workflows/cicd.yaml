@@ -112,7 +112,8 @@ jobs:
         name: Build default
         working-directory: ${{env.base_dir}}/${{ matrix.container_name }}
         run: |
-          make build IMAGE_NAME=${{ env.registry }}/${{ env.image_prefix }}${{ matrix.container_name }} WORKSPACE_FOLDER=${{ env.workspace_folder }}
+          BRANCH=${{ github.ref_name }}
+          make build BASE_IMAGE_TAG=$BRANCH IMAGE_NAME=${{ env.registry }}/${{ env.image_prefix }}${{ matrix.container_name }} WORKSPACE_FOLDER=${{ env.workspace_folder }}
 
       - if: startsWith(github.ref, 'refs/tags/v')
         name: Build lock base image tags to same version
