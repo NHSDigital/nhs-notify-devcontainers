@@ -82,7 +82,7 @@ jobs:
               - '${{ env.workflow_path }}'
 
   build-and-push-image:
-    if: ${{ needs.check-if-changed.outputs.src == 'true' || startsWith(github.ref, 'refs/tags/v') }}
+    if: ${{ !cancelled() && (needs.check-if-changed.outputs.src == 'true' || startsWith(github.ref, 'refs/tags/v')) }}
     needs: check-if-changed
     runs-on: ubuntu-latest
     strategy:
