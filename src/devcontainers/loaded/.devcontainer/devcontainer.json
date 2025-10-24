@@ -13,7 +13,7 @@
     "postStartCommand": "echo ${localEnv:CONTAINER_NAME} Started",
 
     "features": {
-        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.21": {}
+        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.22": {}
     },
     "runArgs": [
         "--platform=linux/amd64"
