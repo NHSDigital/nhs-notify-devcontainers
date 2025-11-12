@@ -13,7 +13,7 @@
     "postStartCommand": "echo ${localEnv:CONTAINER_NAME} Started",
 
     "features": {
-        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.25": {}
+        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.26": {}
     },
     "runArgs": [
         "--platform=linux/amd64"
@@ -21,11 +21,5 @@
     "forwardPorts": [
         4000
     ],
-    "remoteUser": "vscode",
-    "containerEnv": {
-        "UPDATEFROMTEMPLATE": "true",
-        "SHOWWELCOME": "true",
-        "MAKECONFIG": "true",
-        "GITHUBMONITOR": "true"
-    }
+    "remoteUser": "vscode"
 }

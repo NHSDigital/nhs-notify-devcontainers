@@ -9,5 +9,4 @@ fi
 
 echo "running make config"
 export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
-make config
-echo "make config complete"
+make config && echo "make config complete" || echo "make config failed"

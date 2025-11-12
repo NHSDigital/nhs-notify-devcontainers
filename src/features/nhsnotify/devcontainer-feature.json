@@ -1,13 +1,13 @@
 {
     "containerEnv": {
-        "UPDATEFROMTEMPLATE": "true",
-        "SHOWWELCOME": "true",
+        "UPDATEFROMTEMPLATE": "false",
+        "SHOWWELCOME": "false",
         "MAKECONFIG": "true",
-        "GITHUBMONITOR": "true"
+        "GITHUBMONITOR": "false"
     },
     "id": "nhsnotify",
     "name": "NHS Notify",
-    "version": "1.0.25",
+    "version": "1.0.26",
     "dependsOn": {
         "ghcr.io/devcontainers/features/common-utils:2.5.4": {
             "configureZshAsDefaultShell": true,

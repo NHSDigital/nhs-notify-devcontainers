@@ -11,9 +11,7 @@
     },
     "postCreateCommand": "echo ${localEnv:CONTAINER_NAME} Created",
     "postStartCommand": "echo ${localEnv:CONTAINER_NAME} Started",
-    "features": {
-        "ghcr.io/nhsdigital/nhs-notify-devcontainers/nhsnotify:1.0.24": {}
-    },
+
     "runArgs": [
         "--platform=linux/amd64"
     ],
@@ -21,12 +19,7 @@
         4000
     ],
     "remoteUser": "vscode",
-    "containerEnv": {
-        "UPDATEFROMTEMPLATE": "true",
-        "SHOWWELCOME": "true",
-        "MAKECONFIG": "true",
-        "GITHUBMONITOR": "true"
-    },
+
     "initializeCommand": "touch $HOME/.gitconfig || true && mkdir -p $HOME/.aws || true && mkdir -p $HOME/.gnupg || true && mkdir -p $HOME/.ssh || true",
     "mounts": [
         {
@@ -54,5 +47,5 @@
             "target": "/home/vscode/.ssh",
             "type": "bind"
         }
-    ],
+    ]
 }
