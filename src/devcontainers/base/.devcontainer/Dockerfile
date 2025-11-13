@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 ARG BASE_CONTAINER_NAME
 ARG CONTAINER_NAME
 ARG BASE_IMAGE_TAG
